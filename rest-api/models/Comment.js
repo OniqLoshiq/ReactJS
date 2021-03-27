@@ -18,10 +18,6 @@ const commentSchema = new mongoose.Schema({
     author: {
         type: ObjectId,
         ref: "User"
-    },
-    article: {
-        type: ObjectId,
-        ref: "Article"
     }
 }, { timestamps: true });
 
