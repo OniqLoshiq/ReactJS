@@ -7,45 +7,57 @@ import Home from './components/Home/Home';
 import About from './components/About/About';
 import Footer from './components/Footer/Footer'
 
+import Register from './components/User/Register';
+import SignIn from './components/User/SignIn';
+
 class App extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      shouldFormatHeader: false,
-      pageYOffset: 0
-    }
+  // constructor(props){
+  //   super(props)
+  //   this.state = {
+  //     shouldFormatHeader: false,
+  //     pageYOffset: 0
+  //   }
 
-    this.handleScroll = this.handleScroll.bind(this);
-  }
+  //   componentDidMount() {
+  //     window.addEventListener('scroll', this.props.handleScroll);
+  // }
 
-  handleScroll(){
-    this.setState({ 
-      pageYOffset: window.pageYOffset,
-      shouldFormatHeader: this.state.pageYOffset < 344 ? false : true
-    });
-  }
+  // componentWillUnmount(){
+  //     window.removeEventListener('scroll', this.props.handleScroll)
+  // }
 
-  componentDidUpdate(prevProps, prevState){
-    if(this.state.shouldFormatHeader === prevState.shouldFormatHeader){
-      return;
-    }
-  }
+  //   this.handleScroll = this.handleScroll.bind(this);
+  // }
 
-  render(){
-    let shouldFormatHeader = this.state.shouldFormatHeader;
+  // handleScroll(){
+  //   this.setState({ 
+  //     pageYOffset: window.pageYOffset,
+  //     shouldFormatHeader: this.state.pageYOffset < 344 ? false : true
+  //   });
+  // }
 
+  // componentDidUpdate(prevProps, prevState){
+  //   if(this.state.shouldFormatHeader === prevState.shouldFormatHeader){
+  //     return;
+  //   }
+  // }
+
+  render() {
     return (
       <>
-        <Header shouldFormatHeader={shouldFormatHeader} />
+        <Header />
         <JumbotronWrapper />
 
         <Layout>
           <Switch>
-            <Route path="/" exact render={(props) => ( <Home {...props} handleScroll={this.handleScroll}/>)} />
+            <Route path="/" exact component={Home} />
             <Route path="/about" exact component={About} />
+
+            <Route path="/user/register" exact component={Register} />
+            <Route path="/user/signIn" exact component={SignIn} />
           </Switch>
         </Layout>
-  
+
         <Footer />
       </>
     );

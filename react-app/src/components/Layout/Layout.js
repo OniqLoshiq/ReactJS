@@ -1,12 +1,19 @@
-import Container from 'react-bootstrap/Container'
+import Container from 'react-bootstrap/Container';
+import styled from 'styled-components';
+
+const Styles = styled.div`
+    padding-bottom: 3rem;
+`;
 
 const Layout = ({
     children
 }) => {
     return (
-        <Container>
-            {children}
-        </Container>
+        <Styles>
+            <Container>
+                {children}
+            </Container>
+        </Styles>
     );
 };
 

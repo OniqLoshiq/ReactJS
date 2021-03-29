@@ -1,21 +1,4 @@
-import { Component } from 'react';
-
-
-
-class Home extends Component {
-    constructor(props){
-        super(props)
-    }
-
-    componentDidMount() {
-        window.addEventListener('scroll', this.props.handleScroll);
-    }
-
-    componentWillUnmount(){
-        window.removeEventListener('scroll', this.props.handleScroll)
-    }
-
-    render() {
+const Home = () => {
         return (
             <div style={{ height: "200vh" }}>
                 <h1 >Some text 1</h1>
@@ -25,7 +8,6 @@ class Home extends Component {
                 <h1 >Some text 5</h1>
             </div >
         )
-    }
 }
 
 export default Home;

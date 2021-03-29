@@ -1,11 +1,12 @@
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
 import styled from 'styled-components';
+import typeWriter from '../../assets/img/typewriter.jpg'
 
 const Styles = styled.div`
     .jumbo{
         position:relative;
-        background: url(./typewriter.jpg);
+        background: url(${typeWriter});
         background-repeat: no-repeat;
         background-size: cover;
         height: 25rem;
