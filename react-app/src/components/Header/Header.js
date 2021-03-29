@@ -20,9 +20,20 @@ const Styles = styled.div`
         justify-content: flex-end;
     }
 
-    a, .navbar-nav .nav-link {
+    .nav-item{
+        display: block;
+        padding: .5rem 1rem;
+    }
+
+    a {
+        display: block;
+    }
+
+    a, .navbar-nav .nav-item {
         color: white;
         text-decoration: none;
+        padding-right: .5rem;
+        padding-left: .5rem;
 
          &:hover {
         color: red;
@@ -42,13 +53,15 @@ const Header = ({
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
-                        <Nav.Link href="/" >Home</Nav.Link>
-                        <Nav.Link href="/about">About us</Nav.Link>
-                        <Nav.Link href="#">Contacts</Nav.Link>
+                        <Nav.Item><Link to="/">Home</Link></Nav.Item>
+                        <Nav.Item><Link to="/about">About us</Link></Nav.Item>
+                        <Nav.Item><Link to="/contacts">Contacts</Link></Nav.Item>
                     </Nav>
                     <Nav className="ml-auto">
-                        <Nav.Link href="#">Hello, Dokka!</Nav.Link>
-                        <Nav.Link href="#">Logout</Nav.Link>
+                        <Nav.Item><Link to="/user/profile">Hello, Dokka!</Link></Nav.Item>
+                        <Nav.Item><Link to="/user/register">Register</Link></Nav.Item>
+                        <Nav.Item><Link to="/user/signin">Sign In</Link></Nav.Item>
+                        <Nav.Item><Link to="/user/logout">Logout</Link></Nav.Item>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
