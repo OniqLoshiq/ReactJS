@@ -1,5 +1,9 @@
+import FeaturedCard from '../Article/FeaturedCard';
+
 const About = () => {
-    return null;
+    return (
+    <FeaturedCard />
+)
 }
 
 export default About;

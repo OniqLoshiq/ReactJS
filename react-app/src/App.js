@@ -5,6 +5,7 @@ import JumbotronWrapper from './components/JumbotronWrapper/JumbotronWrapper'
 import Layout from './components/Layout/Layout';
 import Home from './components/Home/Home';
 import About from './components/About/About';
+import Demo from './components/Demo/Demo';
 import Footer from './components/Footer/Footer'
 
 import Register from './components/User/Register';
@@ -52,6 +53,7 @@ class App extends Component {
           <Switch>
             <Route path="/" exact component={Home} />
             <Route path="/about" exact component={About} />
+            <Route path="/demo" exact component={Demo} />
 
             <Route path="/user/register" exact component={Register} />
             <Route path="/user/signIn" exact component={SignIn} />
