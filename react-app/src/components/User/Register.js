@@ -6,25 +6,6 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import styled from 'styled-components';
 
-const Styles = styled.div`
-    padding-bottom: 2rem;
-
-    .wrapper{
-        display: flex;
-        justify-content: center;
-    }
-
-    hr{
-       background-color:red;
-       display: block;
-       width: 100%;
-    }
-
-    .react-date-picker__wrapper{
-        border-style: none;
-    }
-    
-`;
 
 const Register = () => {
     const [startDate, setStartDate] = useState(new Date());
@@ -97,4 +78,37 @@ const Register = () => {
     )
 }
 
-export default Register
+export default Register;
+
+const Styles = styled.div`
+    padding-bottom: 2rem;
+
+    .wrapper{
+        display: flex;
+        justify-content: center;
+    }
+
+    hr{
+       background-color:red;
+       display: block;
+       width: 100%;
+    }
+
+    .react-date-picker__wrapper{
+        border-style: none;
+    }
+    
+    input, .react-date-picker, .custom-file-label{
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+        border-radius: 0;
+        border-bottom: 1px solid blue;
+
+        &:focus, &:active {
+            box-shadow: none;
+            border-bottom: 2px solid red;
+            background-color: rgba(255, 0, 0, 0.2);
+        }
+    }
+`;
