@@ -10,9 +10,7 @@ const FeaturedCard = () => {
             <Card className="bg-dark text-white">
                 <Link to="/user/signIn">
                     <Card.Img src={sky} alt="Card image" />
-                    <div className="button-wrapper">
-                        <button type="button">Read More</button>
-                    </div>
+                    <button type="button">Read More</button>
                     <Card.ImgOverlay>
                         <Card.Title>Card title</Card.Title>
                         <Card.Text>
@@ -36,8 +34,8 @@ const Styles = styled.div`
    text-align: left;
 
    .card {
-         margin-left: 1.7rem;
-         margin-right: 1.7rem;
+         margin-left: 1.5rem;
+         margin-right: 1.5rem;
          margin-bottom: 1.5rem;
    }
 
@@ -46,6 +44,7 @@ const Styles = styled.div`
         width: calc(100vw/2);
         height: calc(100vw*0.28);
         max-height: calc(500px/1.786);
+        min-width: 260px;
         object-fit: cover;
 
         &:hover .card-img{
@@ -70,7 +69,7 @@ const Styles = styled.div`
         position: absolute;
         text-align: center;
         left: 50%;
-        top:50%;
+        top: 45%;
         transform: translateX(-50%) translateY(-50%);
         background: none;
 	    color: inherit;
@@ -105,6 +104,12 @@ const Styles = styled.div`
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
+        }
+    }
+
+    @media screen and (max-width: 1199px) {
+        .card, .card-img{
+            max-width: 525px;
         }
     }
 `;

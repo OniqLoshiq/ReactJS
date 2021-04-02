@@ -27,14 +27,17 @@ const FeaturedCarousel = () => {
 
 export default FeaturedCarousel;
 
-
 const Styles = styled.div`
     display: flex;
-
+    
     .carousel, .carousel-item{
         left: 50%;
         transform: translateX(-50%);
         text-align: center;
+    }
+
+    .carousel-inner{
+        max-width: 1096px;
     }
 
     .carousel-caption {
@@ -58,7 +61,7 @@ const Styles = styled.div`
     }
 
     .carousel-control-prev{
-        padding-right: 2rem;
+        padding-right: 3rem;
         padding-bottom: 3rem;
     }
 
