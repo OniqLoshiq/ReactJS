@@ -1,9 +1,9 @@
-import FeaturedCarousel from '../Article/FeaturedCarousel';
+import ListCard from '../Category/ListCard';;
 
 
 const Demo = () => {
     return(
-        <FeaturedCarousel />
+        <ListCard/>
     )
 }
 

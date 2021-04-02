@@ -5,6 +5,7 @@ import JumbotronWrapper from './components/JumbotronWrapper/JumbotronWrapper'
 import Layout from './components/Layout/Layout';
 import Home from './components/Home/Home';
 import About from './components/About/About';
+import Categories from './components/Category/Categories';
 import Demo from './components/Demo/Demo';
 import Footer from './components/Footer/Footer'
 
@@ -57,6 +58,8 @@ class App extends Component {
 
             <Route path="/user/register" exact component={Register} />
             <Route path="/user/signIn" exact component={SignIn} />
+
+            <Route path="/categories" exact component={Categories} />
           </Switch>
         </Layout>
 
