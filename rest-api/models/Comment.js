@@ -5,18 +5,10 @@ const commentSchema = new mongoose.Schema({
         type: String,
         require: true,
         minlength: 2,
-        maxlength: 150
-    },
-    likes: {
-        type: Number,
-        default: 0
-    },
-    dislikes: {
-        type: Number,
-        default: 0
+        maxlength: 250
     },
     author: {
-        type: ObjectId,
+        type: 'ObjectId',
         ref: "User"
     }
 }, { timestamps: true });

@@ -22,26 +22,40 @@ const articleSchema = new mongoose.Schema({
     pictures: [{
         type: String
     }],
-    likes: {
-        type: Number,
-        default: 0
-    },
+    likes: [{
+        type: 'ObjectId',
+        ref: "User"
+    }],
+    dislikes:[{
+        type: 'ObjectId',
+        ref: "User"
+    }],
     author: {
-        type: ObjectId,
+        type: 'ObjectId',
         ref: "User"
     },
     category: {
-        type: ObjectId,
+        type: 'ObjectId',
         ref: "Category"
     },
     comments: [{
-        type: ObjectId,
+        type: 'ObjectId',
         ref: "Comment"
     }]
 },{ timestamps: true });
 
+articleSchema.set('toJSON', { virtuals: true });
+
 articleSchema.virtual('commentsCount').get(function () {
     return this.comments.length;
+});
+
+articleSchema.virtual('likesCount').get(function () {
+    return this.likes.length;
+});
+
+articleSchema.virtual('dislikesCount').get(function () {
+    return this.dislikes.length;
 });
 
 module.exports = mongoose.model('Article', articleSchema);
