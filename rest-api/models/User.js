@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const config = require('../config');
+const ROLE = require('../common/roles');
 
 const userSchema = new mongoose.Schema({
     firstName: {
@@ -19,7 +22,7 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
         minlength: 4,
-        maxlength: 12
+        maxlength: 15
     },
     password: {
         type: String,
@@ -33,11 +36,44 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    articles: [{ type: ObjectId, ref: "Article" }]
-},{ timestamps: { createdAt: 'registeredAt' } });
+    role: {
+        type: String,
+        enum: [ROLE.ADMIN, ROLE.MODERATOR, ROLE.BASIC],
+        default: ROLE.BASIC
+    },
+}, { timestamps: { createdAt: 'registeredAt' } });
+
+
+userSchema.set('toJSON', { virtuals: true });
 
 userSchema.virtual('fullName').get(function () {
     return this.firstName + ' ' + this.lastName
+});
+
+userSchema.methods.verifyPassword = async function (password) {
+    const passwordMatch = await bcrypt.compare(password, this.password);
+
+    return passwordMatch;
+}
+
+userSchema.pre('save', async function (err, user, next) {
+    if (this.isModified('password')) {
+        try {
+            const salt = await bcrypt.genSalt(+config.SALT_ROUNDS);
+            try {
+                this.password = await bcrypt.hash(this.password, salt);
+                next();
+            } catch (err) {
+                console.error(err);
+                throw new Error('Server Error');
+            }
+        } catch (err) {
+            console.error(err);
+            throw new Error('Server Error');
+        }
+        return;
+    }
+    next();
 });
 
 
