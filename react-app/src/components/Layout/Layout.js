@@ -1,10 +1,6 @@
 import Container from 'react-bootstrap/Container';
 import styled from 'styled-components';
 
-const Styles = styled.div`
-    padding-bottom: 3rem;
-`;
-
 const Layout = ({
     children
 }) => {
@@ -17,5 +13,16 @@ const Layout = ({
     );
 };
 
-
 export default Layout;
+
+const Styles = styled.div`
+
+    .container{
+        padding-bottom: 3.5rem;
+        padding-top: 2.5rem;
+        background-color: silver;
+        border-top-left-radius: 0.75rem;
+        border-top-right-radius: 0.75rem;
+        margin-top: -4rem;
+    }
+`;

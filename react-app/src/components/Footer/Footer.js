@@ -1,5 +1,16 @@
 import styled from 'styled-components';
 
+const Footer = () => {
+    return (
+        <Styles>
+            <span>Copyright &copy; 2021 OniqLoshiq Design since 1987. All rights reserved. </span>
+        </Styles>
+    );
+};
+
+
+export default Footer;
+
 const Styles = styled.div`
     position: absolute;
     bottom: 0;
@@ -10,14 +21,3 @@ const Styles = styled.div`
     font-size: 0.75rem;
     color: white;
 `;
-
-
-const Footer = () => {
-    return (
-        <Styles>
-            <span>Copyright &copy; 2021 OniqLoshiq Design since 1987. All rights reserved. </span>
-        </Styles>
-    );
-};
-
-export default Footer;

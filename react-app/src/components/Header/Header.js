@@ -44,7 +44,7 @@ const Styles = styled.div`
         height: ${props => props.shouldFormat ? "40px" : "65px"};
     }
     .navbar {
-        background-color:  ${props => props.shouldFormat ? "rgba(255, 138, 101, 1)" : "rgba(255, 138, 101, 1)"};
+        background-color:  rgba(255, 138, 101, 0.1);
         padding: 0.5rem 2rem 0.5rem 5.5rem;
         font-size: 1.1rem;
         font-weight: bold;
