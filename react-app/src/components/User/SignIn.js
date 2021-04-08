@@ -4,11 +4,14 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
+import Title from '../Shared/Title';
+import HrLine from '../Shared/HrLine';
 
 const SignIn = () => {
     return (
         <Styles>
-            <div className="title">Sing In</div>
+            <Title title='Sign in' />
+            <HrLine hrWidth="75%" mTop="1rem" mBottom="2.2rem" />
             <Row className="wrapper">
                 <Col md="4" className="panel-left center-wrapper">
                     <div><img src="/EP-logo_1.png" alt="e-platform logo" /></div>
@@ -26,11 +29,11 @@ const SignIn = () => {
                                     <Form.Label>Password</Form.Label>
                                     <Form.Control type="password" placeholder="Enter password" />
                                 </Form.Group>
-                                <Form.Group as={Row} controlId="rememberMeCheck">
+                                {/* <Form.Group as={Row} controlId="rememberMeCheck">
                                     <Col>
                                         <Form.Check label="Remember me" />
                                     </Col>
-                                </Form.Group>
+                                </Form.Group> */}
                                 <div className="center-wrapper bottom-margin-setter">
                                     <Button variant="primary" type="submit">
                                         Sign In
@@ -51,15 +54,7 @@ const SignIn = () => {
 
 export default SignIn;
 
-
 const Styles = styled.div`
-    .title{
-        padding-bottom: 1rem;
-        font-weight: bold;
-        text-transform: uppercase;
-        font-size: 2rem;
-    }
-
     .wrapper{
         width:70%;
         margin: auto;
