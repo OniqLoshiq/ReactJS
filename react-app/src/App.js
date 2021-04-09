@@ -50,8 +50,9 @@ class App extends Component {
         <Header />
         <JumbotronWrapper />
 
-        <Layout>
+       
           <Switch>
+          <Layout>
             <Route path="/" exact component={Home} />
             <Route path="/about" exact component={About} />
             <Route path="/demo" exact component={Demo} />
@@ -60,8 +61,9 @@ class App extends Component {
             <Route path="/user/signIn" exact component={SignIn} />
 
             <Route path="/categories" exact component={Categories} />
+             </Layout>
           </Switch>
-        </Layout>
+       
 
         <Footer />
       </>

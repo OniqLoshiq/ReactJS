@@ -21,7 +21,10 @@ const LatestCard = () => {
               </Card.Text>
                 </Card.Body>
                 <Card.Footer>
-                    <small className="text-muted">Last updated 3 mins ago</small>
+                    <small className="text-muted">
+                        <div>Science asd asd eqwsssww</div>
+                        <div>09/04/2021</div>
+                    </small>
                 </Card.Footer>
             </Card>
         </Styles>
@@ -79,5 +82,10 @@ const Styles = styled.div`
     a {
         color: white;
         text-decoration: none;
+    }
+
+    .text-muted{
+        display: flex;
+        justify-content: space-between;
     }
 `;

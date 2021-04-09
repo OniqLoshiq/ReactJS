@@ -21,8 +21,7 @@ const Styles = styled.div`
         padding-bottom: 3.5rem;
         padding-top: 2.5rem;
         background-color: silver;
-        border-top-left-radius: 0.75rem;
-        border-top-right-radius: 0.75rem;
+        border-radius: 0.75rem;
         margin-top: -4rem;
     }
 `;
