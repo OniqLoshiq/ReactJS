@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { useHistory } from 'react-router-dom';
 import DatePicker from 'react-date-picker';
-
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -9,91 +9,201 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import Title from '../Shared/Title';
 import HrLine from '../Shared/HrLine';
 import styled from 'styled-components';
-import defaultProfilePicture from '../../assets/img/person-reading-book.png'
+import * as Yup from 'yup';
+import { Formik } from 'formik';
 
+import CommonInput from '../FormFields/CommonInput';
+import defaultProfilePicture from '../../assets/img/person-reading-book.png'
+import { registerValidations as validations } from '../../helpers/formValidations';
+import authService from '../../services/authService';
+import NotificationContext from "../../contexts/notificationContext";
 
 const Register = () => {
-    const [previewPicture, setPreviewPicture] = useState(defaultProfilePicture)
-    const [startDate, setStartDate] = useState(new Date());
+    const [previewPicture, setPreviewPicture] = useState(defaultProfilePicture);
+    const [customServerError, setCustomServerError] = useState(null);
+    const notification = useContext(NotificationContext);
+    const history = useHistory();
+
+    const previewFile = (file) => {
+        const reader = new FileReader();
+
+        if (file && file.type.match('image.*')) {
+            reader.readAsDataURL(file);
+            reader.onloadend = () => {
+                setPreviewPicture(reader.result);
+            }
+        }
+    }
+
+    const resetPreviewPicture = () => {
+        setPreviewPicture(defaultProfilePicture);
+    }
+
+
+    const schema = Yup.object().shape(validations);
 
     return (
-        <Styles>
-            <Title title='Register as a new member' />
-            <HrLine hrWidth="75%" mTop="1rem" mBottom="2.2rem" />
-            <div className="profile-wrapper">
-                <img className="profile-picture" src={previewPicture} alt='profile-picture' />
-                <OverlayTrigger
-                    placement="right"
-                    overlay={
-                        <Tooltip id="tooltip-right">
-                            Reset picture to default
-                        </Tooltip>
+        <Formik
+            initialValues={{
+                username: '',
+                email: '',
+                firstName: '',
+                lastName: '',
+                dateOfBirth: new Date(),
+                profilePicture: null,
+                password: '',
+                repeatPassword: ''
+            }}
+            validationSchema={schema}
+            onSubmit={async (values) => {
+                try {
+                    const result = await authService.register(values, previewPicture);
+                    notification.update('success', result);
+                    setCustomServerError(null);
+                    setTimeout(() => {
+                        notification.reset();
+                        history.push('/user/signIn');
+                    }, 1500);
+                } catch (error) {
+                    if (typeof error === 'object') {
+                        throw error;
                     }
-                >
-                    <button className="close-button">&#10006;</button>
-                </OverlayTrigger>
-            </div>
-            <Form className="form-form">
-                <Form.Row>
-                    <Form.Group as={Col} md="6">
-                        <Form.Group as={Col} lg="10" controlId="username">
-                            <Form.Label>Username</Form.Label>
-                            <Form.Control placeholder="Enter username" />
-                        </Form.Group>
+                    setCustomServerError(error);
+                }
 
-                        <Form.Group as={Col} lg="10" controlId="email">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control type="email" placeholder="Enter email" />
-                        </Form.Group>
+            }}
+        >
+            {({
+                handleSubmit,
+                values,
+                setFieldValue,
+                isSubmitting
+            }) => (
+                <Styles>
+                    <Title title='Register as a new member' />
+                    <HrLine hrWidth="75%" mTop="1rem" mBottom="2.2rem" />
+                    <div className="profile-wrapper">
+                        <img className="profile-picture" src={previewPicture} alt='profile-avatar' />
+                        <OverlayTrigger
+                            placement="right"
+                            overlay={
+                                <Tooltip>
+                                    Reset picture to default
+                                </Tooltip>
+                            }
+                        >
+                            <button className="close-button" onClick={resetPreviewPicture}>&#10006;</button>
+                        </OverlayTrigger>
+                    </div>
+                   {customServerError &&  <div className="server-error">{customServerError}</div>}
+                    <Form className="form-form" onSubmit={handleSubmit}>
+                        <Form.Row>
+                            <Col md="6">
+                                <Form.Group as={Col} lg="10">
+                                    <CommonInput
+                                        label="Username"
+                                        type="text"
+                                        name="username"
+                                        id="username"
+                                        placeholder="Enter username"
+                                    />
+                                </Form.Group>
 
-                        <Form.Group as={Col} lg="10" controlId="profilePicture">
-                            <Form.Label>Profile Picture</Form.Label>
-                            <Form.Control type="file" id="profilePicture" label='Profile Picture' />
-                        </Form.Group>
-                    </Form.Group>
+                                <Form.Group as={Col} lg="10">
+                                    <CommonInput
+                                        label="Email"
+                                        type="email"
+                                        name="email"
+                                        id="email"
+                                        placeholder="Enter email"
+                                    />
+                                </Form.Group>
 
-                    <Form.Group as={Col} md="6">
-                        <Form.Group as={Col} lg="10" controlId="firstName">
-                            <Form.Label>First Name</Form.Label>
-                            <Form.Control placeholder="Your first name ..." />
-                        </Form.Group>
+                                <Form.Group as={Col} lg="10">
+                                    <Form.Label>Profile Picture</Form.Label>
+                                    <Form.Control
+                                        type="file"
+                                        name="profilePicture"
+                                        id="profilePicture"
+                                        onChange={e => {
+                                            setFieldValue('profilePicture', e.target.files[0]);
+                                            previewFile(e.target.files[0])
+                                        }
+                                        }
+                                    />
+                                </Form.Group>
+                            </Col>
 
-                        <Form.Group as={Col} lg="10" controlId="lastName">
-                            <Form.Label>Last Name</Form.Label>
-                            <Form.Control placeholder="Your last name ..." />
-                        </Form.Group>
+                            <Col md="6">
+                                <Form.Group as={Col} lg="10">
+                                    <CommonInput
+                                        label="First Name"
+                                        type="text"
+                                        name="firstName"
+                                        id="firstName"
+                                        placeholder="Your first name ..."
+                                    />
+                                </Form.Group>
 
-                        <Form.Group as={Col} lg="10" controlId="dateOfBirth">
-                            <Form.Label>Date of Birth</Form.Label>
-                            <DatePicker className="form-control" format="dd/MM/yyyy" value={startDate} onChange={setStartDate} />
-                        </Form.Group>
-                    </Form.Group>
-                </Form.Row>
+                                <Form.Group as={Col} lg="10">
+                                    <CommonInput
+                                        label="Last Name"
+                                        type="text"
+                                        name="lastName"
+                                        id="lastName"
+                                        placeholder="Your last name ..."
+                                    />
+                                </Form.Group>
 
-                <Form.Row>
-                    <Form.Group as={Col} md="6">
-                        <Form.Group as={Col} lg="10" controlId="password">
-                            <hr className="hr-form" />
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" placeholder="Password" />
-                        </Form.Group>
-                    </Form.Group>
-                    <Form.Group as={Col} md="6">
-                        <Form.Group as={Col} lg="10" controlId="repeatPassword">
-                            <hr className="hr-form" />
-                            <Form.Label>Repeat Password</Form.Label>
-                            <Form.Control type="password" placeholder="Repeat Password" />
-                        </Form.Group>
-                    </Form.Group>
-                </Form.Row>
-                <div className="wrapper">
-                    <Button variant="info" type="submit">
-                        Become a member
-                </Button>
-                </div>
+                                <Form.Group as={Col} lg="10" controlId="dateOfBirth">
+                                    <Form.Label>Date of Birth</Form.Label>
+                                    <DatePicker className="form-control"
+                                        format="dd/MM/yyyy"
+                                        name="dateOfBirth"
+                                        value={values.dateOfBirth}
+                                        onChange={e => {
+                                            setFieldValue("dateOfBirth", e)
+                                        }} />
+                                </Form.Group>
+                            </Col>
+                        </Form.Row>
 
-            </Form>
-        </Styles>
+                        <Form.Row>
+                            <Form.Group as={Col} md="6">
+                                <Form.Group as={Col} lg="10">
+                                    <hr className="hr-form" />
+                                    <CommonInput
+                                        label="Password"
+                                        type="password"
+                                        name="password"
+                                        id="password"
+                                        placeholder="Password ..."
+                                    />
+                                </Form.Group>
+                            </Form.Group>
+                            <Form.Group as={Col} md="6">
+                                <Form.Group as={Col} lg="10">
+                                    <hr className="hr-form" />
+                                    <CommonInput
+                                        label="Repeat Password"
+                                        type="password"
+                                        name="repeatPassword"
+                                        id="repeatPassword"
+                                        placeholder="Repeat Password ..."
+                                    />
+                                </Form.Group>
+                            </Form.Group>
+                        </Form.Row>
+                        <div className="wrapper">
+                            <Button variant="info" type="submit" disabled={isSubmitting}>
+                                Become a member
+                            </Button>
+                        </div>
+                        <pre>{JSON.stringify(values, null, 2)}</pre>
+                    </Form>
+                </Styles>
+            )}
+        </Formik>
     )
 }
 
@@ -151,6 +261,8 @@ const Styles = styled.div`
 
     .profile-picture{
         width: 200px;
+        height: 200px;
+        object-fit: cover;
         border-radius: 1rem;
         background-color: white;
         display: inline-block;
@@ -174,5 +286,12 @@ const Styles = styled.div`
         &:before, &:after {
             background-color: #333;
         }
+    }
+
+    .server-error{
+        color:red;
+        font-size: 1.1rem;
+        text-align: center;
+        margin-top: 2rem;
     }
 `;
