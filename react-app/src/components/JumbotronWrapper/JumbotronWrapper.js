@@ -9,12 +9,10 @@ const JumbotronWrapper = () => {
     const [transform, setTransform] = useState('');
 
     useEffect(() => {
-        console.log(1, 'from effect')
         if (window.innerWidth >= 768) {
             window.addEventListener("scroll", handleTransform);
         }
         return function cleanup() {
-            console.log(1, 'from cleanup')
             if (window.innerWidth >= 768) {
                 window.removeEventListener("scroll", handleTransform);
             }
@@ -27,33 +25,37 @@ const JumbotronWrapper = () => {
     }
 
     return (
-        <Styles transform={transform}>
-            <Jumbotron fluid className="jumbo">
+        <Styles >
+            <Jumbo fluid className="jumbo"  transformdata={transform}>
                 <div className="overlay"></div>
                 <Container>
                     <h1>Welcome</h1>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi pariatur doloribus voluptates quas iure rerum eum accusamus eius blanditiis provident.</p>
                 </Container>
-            </Jumbotron>
+            </Jumbo>
         </Styles>
     );
 }
 
 export default JumbotronWrapper;
 
-const Styles = styled.div`
-    .jumbo{
-        position:relative;
+const Jumbo = styled(Jumbotron).attrs(props => ({
+    style: {
+        transform: props.transformdata
+    } 
+}))`
+        position: relative;
+        height: 25rem;
         background: url(${typeWriter});
         background-repeat: no-repeat;
         background-size: cover;
-        height: 25rem;
         z-index: -2;
         display: flex;
         align-items: center;
         text-align: center;
-        transform: ${props => props.transform}
-    }
+`;
+
+const Styles = styled.div`
 
     .overlay {
     background-color: #807e7e;
