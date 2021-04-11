@@ -4,17 +4,19 @@ import ListGroupItem from 'react-bootstrap/ListGroupItem';
 import styled from 'styled-components';
 import keyboard from '../../assets/img/keyboard.jpg'
 
-const ListArticle = () => {
+const ListArticle = ({show}) => {
     return (
         <Styles>
-            <Card style={{ width: '18rem' }}>
+            <Card>
                 <Card.Img variant="top" src={keyboard} />
                 <Card.Body>
                     <Card.Title>Card Title</Card.Title>
-                    <Card.Text>
-                        Some quick example text to build on the card title and make up the bulk of
-                        the card's content.
-                    </Card.Text>
+                    {show && 
+                         <Card.Text>
+                         Some quick example text to build on the card title and make up the bulk of
+                         the card's content.
+                         </Card.Text>
+                    }
                 </Card.Body>
                 <ListGroup className="list-group-flush">
                     <ListGroupItem>Author: OniqLoshiq</ListGroupItem>
@@ -32,10 +34,8 @@ const ListArticle = () => {
 export default ListArticle;
 
 const Styles = styled.div`
-    max-width:15rem;
-    
     .card{
-        max-width:15rem;
+        max-width:16rem;
     }
 
     .list-group-item{
