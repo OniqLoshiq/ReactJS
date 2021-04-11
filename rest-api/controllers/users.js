@@ -10,10 +10,17 @@ const permission = require('../middlewares/permissions');
 router.post('/register', isGuest, async(req,res) => {
     try{
         const createdUser = await usersService.register(req.body);
-        res.status(201).json(createdUser);
+
+        // const credentials = Object.create({});
+        // credentials.id = createdUser._id;
+        // credentials.email = createdUser.email;
+        // credentials.profilePicture = createdUser.profilePicture;
+        // credentials.username = createdUser.username;
+
+        res.status(201).json('You have successfully registered');
     } catch (err) {
         if(err.message.endsWith('is already taken!')){
-            return res.status(400).json({message: err.message});
+            return res.status(400).json(err.message);
         }
         console.log(err);
         res.status(500).json({message: err.message});
@@ -30,7 +37,7 @@ router.post('/signin', isGuest, async (req, res) => {
         res.cookie(COOKIE_NAME, token, {expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 5))});
         res.json(user);
     } catch (err){
-        res.status(401).json({message: err.message});
+        res.status(401).json(err.message);
     }
 })
 
