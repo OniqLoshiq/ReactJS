@@ -7,6 +7,7 @@ import Home from './components/Home/Home';
 import About from './components/About/About';
 import Categories from './components/Category/Categories';
 import Demo from './components/Demo/Demo';
+import Demo2 from './components/Demo/Demo2';
 import Footer from './components/Footer/Footer';
 import Notification from './components/Shared/Notification';
 
@@ -80,7 +81,8 @@ const App = () => {
               <Route path="/" exact component={Home} />
               <Route path="/about" exact component={About} />
               <Route path="/demo" exact component={Demo} />
-
+              <Route path="/demo2" exact component={Demo2} />
+              
               <Route path="/user/register" exact component={Register} />
               <Route path="/user/signIn" exact component={SignIn} />
 
