@@ -1,3 +1,5 @@
+import { useState, useContext } from "react";
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
@@ -6,49 +8,94 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Title from '../Shared/Title';
 import HrLine from '../Shared/HrLine';
+import { Formik } from 'formik';
+
+import CommonInput from '../FormFields/CommonInput';
+import authService from '../../services/authService';
+import NotificationContext from "../../contexts/notificationContext";
 
 const SignIn = () => {
+    const [customServerError, setCustomServerError] = useState(null);
+    const notification = useContext(NotificationContext);
+    const history = useHistory();
+
     return (
-        <Styles>
-            <Title title='Sign in' />
-            <HrLine hrWidth="75%" mTop="1rem" mBottom="2.2rem" />
-            <Row className="wrapper">
-                <Col md="4" className="panel-left center-wrapper">
-                    <div><img src="/EP-logo_1.png" alt="e-platform logo" /></div>
-                    <div>e-Platform</div>
-                </Col>
-                <Col md="8" className="panel-right">
-                    <Form>
-                        <Form.Row>
-                            <Col md="10" >
-                                <Form.Group controlId="username">
-                                    <Form.Label>Username</Form.Label>
-                                    <Form.Control placeholder="Enter username" />
-                                </Form.Group>
-                                <Form.Group controlId="password">
-                                    <Form.Label>Password</Form.Label>
-                                    <Form.Control type="password" placeholder="Enter password" />
-                                </Form.Group>
-                                {/* <Form.Group as={Row} controlId="rememberMeCheck">
-                                    <Col>
-                                        <Form.Check label="Remember me" />
+        <Formik
+            initialValues={{
+                username: '',
+                password: '',
+            }}
+            onSubmit={async (values) => {
+                try {
+                    const result = await authService.login(values);
+                    notification.update('success', 'Sign in was successfull');
+                    setCustomServerError(null);
+                    setTimeout(() => {
+                        notification.reset();
+                        history.push('/');
+                    }, 1500);
+                } catch (error) {
+                    if (typeof error === 'object') {
+                        throw error;
+                    }
+                    setCustomServerError(error);
+                }
+            }}
+        >
+            {({
+                handleSubmit,
+                values,
+                isSubmitting
+            }) => (
+                <Styles>
+                    <Title title='Sign in' />
+                    <HrLine hrWidth="75%" mTop="1rem" mBottom="2.2rem" />
+                    <Row className="wrapper">
+                        <Col md="4" className="panel-left center-wrapper">
+                            <div><img src="/EP-logo_1.png" alt="e-platform logo" /></div>
+                            <div>e-Platform</div>
+                        </Col>
+                        <Col md="8" className="panel-right">
+                            <Form onSubmit={handleSubmit}>
+                                <Form.Row>
+                                    <Col md="10" >
+                                        <Form.Group>
+                                            <CommonInput
+                                                label="Username"
+                                                type="text"
+                                                name="username"
+                                                id="username"
+                                                placeholder="Enter username"
+                                            />
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <CommonInput
+                                                label="Password"
+                                                type="password"
+                                                name="password"
+                                                id="password"
+                                                placeholder="Enter password"
+                                            />
+                                        </Form.Group>
+                                        {customServerError &&  <div className="server-error">{customServerError}</div>}
+                                        <div className="center-wrapper bottom-margin-setter">
+                                            <Button variant="primary" type="submit" disabled={isSubmitting}>
+                                                Sign In
+                                             </Button>
+                                        </div>
+                                        <div className="bottom-margin-setter content-center">Don't have an account? <Link to="/user/register">Join us now</Link></div>
                                     </Col>
-                                </Form.Group> */}
-                                <div className="center-wrapper bottom-margin-setter">
-                                    <Button variant="primary" type="submit">
-                                        Sign In
-                                    </Button>
-                                </div>
-                                <div className="bottom-margin-setter content-center">Don't have an account? <Link to="user/register">Join us now</Link></div>
-                            </Col>
-                        </Form.Row>
-                    </Form>
-                </Col>
-            </Row>
-            <div className="inner-footer">
-                Your privacy is our mission &hearts; "Ho-ho-ha-ha"
+                                </Form.Row>
+                            </Form>
+                        </Col>
+                    </Row>
+                    <pre>{JSON.stringify(values, null, 2)}</pre>
+                    <div className="inner-footer">
+                        Your privacy is our mission &hearts; "Ho-ho-ha-ha"
             </div>
-        </Styles>
+                </Styles>
+            )}
+        </Formik>
     )
 }
 
@@ -101,6 +148,13 @@ const Styles = styled.div`
 
     .bottom-margin-setter{
         margin-bottom: 1rem;
+    }
+
+    .server-error{
+        color:red;
+        font-size: 1.1rem;
+        text-align: center;
+        margin-top: 2rem;
     }
 
     @media screen and (max-width: 767px) {

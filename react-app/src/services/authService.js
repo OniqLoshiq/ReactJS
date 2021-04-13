@@ -24,7 +24,9 @@ const authService = {
 
                 return res.json();
             })
-    }
+    },
+
+    login: '',
 }
 
 
