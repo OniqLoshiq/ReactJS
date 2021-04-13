@@ -53,7 +53,22 @@ router.post('/logout', isAuth, (req, res) => {
         })
 });
 
+//Get credentials
+router.get('/auth', async(req,res) => {
+    if(req.user){
+        const user = await usersService.getOne(req.user._id);
+        const credentials = Object.create({});
 
+        credentials.id = user._id;
+        credentials.email = user.email;
+        credentials.profilePicture = user.profilePicture;
+        credentials.username = user.username;
+
+        return res.json(credentials);
+    }
+
+    res.json('Not signed in')
+})
 
 //Getting all
 router.get('/', isAuth, authRoleAdmin, async (req, res) =>{
