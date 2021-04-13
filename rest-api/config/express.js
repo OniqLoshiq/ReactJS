@@ -5,7 +5,10 @@ const routes = require('../routes');
 const authentication = require('../middlewares/authentication');
 
 module.exports = (app) => {
-    app.use(cors());
+    app.use(cors({
+        origin: 'http://localhost:3000',
+        credentials: true
+      }));
 
     app.use(express.json());
 
