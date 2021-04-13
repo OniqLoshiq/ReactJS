@@ -24,10 +24,10 @@ const Demo2 = () => {
                     'insertdatetime media table paste code help wordcount'
                 ],
                 toolbar:
-                    'undo redo | formatselect | bold italic backcolor hr | \
+                    `undo redo | formatselect | bold italic backcolor hr | \
                         alignleft aligncenter alignright alignjustify | \
                         bullist numlist outdent indent | removeformat | image imagetools media help | \
-                        table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
+                        table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol`,
                 image_caption: true,
                 image_advtab: true,
                 imagetools_toolbar: 'rotateleft rotateright | flipv fliph | editimage imageoptions'

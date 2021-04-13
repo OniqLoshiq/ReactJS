@@ -11,12 +11,6 @@ router.post('/register', isGuest, async(req,res) => {
     try{
         const createdUser = await usersService.register(req.body);
 
-        // const credentials = Object.create({});
-        // credentials.id = createdUser._id;
-        // credentials.email = createdUser.email;
-        // credentials.profilePicture = createdUser.profilePicture;
-        // credentials.username = createdUser.username;
-
         res.status(201).json('You have successfully registered');
     } catch (err) {
         if(err.message.endsWith('is already taken!')){
@@ -33,9 +27,10 @@ router.post('/signin', isGuest, async (req, res) => {
 
     try{
         const [user, token] = await usersService.singIn(username, password);
+        const credentials = usersService.getCredentials(user);
 
-        res.cookie(COOKIE_NAME, token, {expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 5))});
-        res.json(user);
+        res.cookie(COOKIE_NAME, token, {sameSite:"none", secure: true, expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 5))});
+        res.json(credentials);
     } catch (err){
         res.status(401).json(err.message);
     }
@@ -46,7 +41,7 @@ router.post('/logout', isAuth, (req, res) => {
     const token = req.cookies[COOKIE_NAME];
     BlackListToken.create({ token })
         .then(() => {
-            res.clearCookie(COOKIE_NAME);
+            res.clearCookie(COOKIE_NAME, {sameSite:"none", secure: true});
             res.json('You have successfully logged out!')
         }).catch(err => {
             res.status(500).json({ message: err.message });
@@ -57,12 +52,7 @@ router.post('/logout', isAuth, (req, res) => {
 router.get('/auth', async(req,res) => {
     if(req.user){
         const user = await usersService.getOne(req.user._id);
-        const credentials = Object.create({});
-
-        credentials.id = user._id;
-        credentials.email = user.email;
-        credentials.profilePicture = user.profilePicture;
-        credentials.username = user.username;
+        const credentials = usersService.getCredentials(user);
 
         return res.json(credentials);
     }

@@ -15,6 +15,7 @@ const authService = {
             headers: {
                 'Content-Type': 'application/json'
             },
+            credentials: "include",
             body: JSON.stringify(data)
         })
             .then(res => {
@@ -26,7 +27,31 @@ const authService = {
             })
     },
 
-    login: '',
+    signIn: (data) => {
+        return fetch(apiRoutes.signIn, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: "include",
+            body: JSON.stringify(data)   
+        })
+        .then(res => {
+            if(!res.ok){
+                return res.json().then(err => Promise.reject(err))
+            }
+
+            return res.json();
+        })
+    },
+
+    logOut: () => {
+        return fetch(apiRoutes.logout, {
+            method: 'POST',
+            credentials: "include"
+        })
+        .then(res => res.text());
+    }
 }
 
 

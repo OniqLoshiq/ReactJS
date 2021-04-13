@@ -27,7 +27,7 @@ module.exports = function () {
                     return next();
                 })
                 .catch(err => {
-                    res.clearCookie(COOKIE_NAME);
+                    res.clearCookie(COOKIE_NAME,{sameSite:"none", secure: true});
                     if (['token expired', 'blacklisted token', 'jwt must be provided'].includes(err.message)) {
                         res.status(401).json('UNAUTHORIZED!');
                         return;

@@ -9,15 +9,20 @@ import Button from 'react-bootstrap/Button';
 import Title from '../Shared/Title';
 import HrLine from '../Shared/HrLine';
 import { Formik } from 'formik';
-
+import * as Yup from 'yup';
+import { signInValidations as validations } from '../../helpers/formValidations';
 import CommonInput from '../FormFields/CommonInput';
 import authService from '../../services/authService';
 import NotificationContext from "../../contexts/notificationContext";
+import AuthContext from "../../contexts/authContext";
 
 const SignIn = () => {
     const [customServerError, setCustomServerError] = useState(null);
     const notification = useContext(NotificationContext);
+    const auth = useContext(AuthContext);
     const history = useHistory();
+
+    const schema = Yup.object().shape(validations);
 
     return (
         <Formik
@@ -25,15 +30,18 @@ const SignIn = () => {
                 username: '',
                 password: '',
             }}
+            validationSchema={schema}
             onSubmit={async (values) => {
                 try {
-                    const result = await authService.login(values);
+                    const result = await authService.signIn(values);
+                    auth.setUserCredentials(result);
                     notification.update('success', 'Sign in was successfull');
-                    setCustomServerError(null);
+                    if (customServerError) setCustomServerError(null);
+
                     setTimeout(() => {
                         notification.reset();
                         history.push('/');
-                    }, 1500);
+                    }, 1000);
                 } catch (error) {
                     if (typeof error === 'object') {
                         throw error;
@@ -144,6 +152,7 @@ const Styles = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
+        margin-top: 1rem;
     }
 
     .bottom-margin-setter{
@@ -154,7 +163,7 @@ const Styles = styled.div`
         color:red;
         font-size: 1.1rem;
         text-align: center;
-        margin-top: 2rem;
+        margin-top: 1rem;
     }
 
     @media screen and (max-width: 767px) {

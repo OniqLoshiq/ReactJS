@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Header = ({
+    username,
     shouldFormatHeader
 }) => {
     return (
@@ -22,7 +23,7 @@ const Header = ({
                         <Nav.Item><Link to="/demo2">Demo2</Link></Nav.Item>
                     </Nav>
                     <Nav className="ml-auto">
-                        <Nav.Item><Link to="/user/profile">Hello, Dokka!</Link></Nav.Item>
+                        <Nav.Item><Link to="/user/profile">Hello, {username ? username : "Guest"}!</Link></Nav.Item>
                         <Nav.Item><Link to="/user/register">Register</Link></Nav.Item>
                         <Nav.Item><Link to="/user/signin">Sign In</Link></Nav.Item>
                         <Nav.Item><Link to="/user/logout">Logout</Link></Nav.Item>

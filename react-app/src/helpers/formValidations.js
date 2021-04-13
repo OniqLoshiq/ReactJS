@@ -39,6 +39,17 @@ const registerValidations = {
       })
 }
 
+const signInValidations = {
+    username: Yup.string()
+        .required('Username is required')
+        .min(4, 'Enter valid username')
+        .max(15, 'Enter valid username'),
+
+    password: Yup.string()
+    .required('Password is required')
+}
+
 export {
     registerValidations,
+    signInValidations
 }

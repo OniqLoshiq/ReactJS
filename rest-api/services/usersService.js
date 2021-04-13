@@ -4,7 +4,7 @@ const User = require('../models/User');
 const ROLE = require('../common/roles');
 
 async function getUserByUsername(username) {
-    let user = await User.findOne({ username });
+    let user = await User.findOne({ username: username });
 
     return user;
 }
@@ -32,9 +32,11 @@ module.exports = {
 
     async register(data) {
         let count;
+
         try {
-            count = await User.countDocuments({ username: data.username });
-            if(count > 0) throw { message: 'Username is already taken!' } 
+            count = await User.countDocuments({ username: data.username});
+            
+            if(count > 0) throw { message: 'Username is already taken!' }; 
         } catch (err) {
             throw { message: err.message } 
         }
@@ -67,5 +69,16 @@ module.exports = {
         const user = await User.findOne({_id: id});
 
         return user;
+    },
+
+    getCredentials(user){
+        const credentials = Object.create({});
+        credentials.id = user._id;
+        credentials.email = user.email;
+        credentials.profilePicture = user.profilePicture;
+        credentials.username = user.username;
+        credentials.role = user.role;
+
+        return credentials;
     }
 }

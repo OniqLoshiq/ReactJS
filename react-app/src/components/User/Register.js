@@ -59,7 +59,8 @@ const Register = () => {
                 try {
                     const result = await authService.register(values, previewPicture);
                     notification.update('success', result);
-                    setCustomServerError(null);
+                    if (customServerError) setCustomServerError(null);
+                    
                     setTimeout(() => {
                         notification.reset();
                         history.push('/user/signIn');
