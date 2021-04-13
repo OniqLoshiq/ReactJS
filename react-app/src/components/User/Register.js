@@ -235,7 +235,7 @@ const Styles = styled.div`
         background-color: white;
     }
     
-    input, .react-date-picker, #profilePicture{
+    .react-date-picker, #profilePicture{
         border-top: 0;
         border-left: 0;
         border-right: 0;
@@ -243,7 +243,7 @@ const Styles = styled.div`
         border-bottom: 1px solid blue;
 
         &:focus, &:active {
-            box-shadow: none;
+            box-shadow: none
             border-bottom: 2px solid red;
             background-color: rgba(255, 0, 0, 0.2);
         }
