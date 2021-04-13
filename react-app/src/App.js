@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Switch, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import JumbotronWrapper from './components/JumbotronWrapper/JumbotronWrapper'
@@ -15,9 +15,33 @@ import NotificationContext from './contexts/notificationContext';
 
 import Register from './components/User/Register';
 import SignIn from './components/User/SignIn';
+import apiRoutes from './helpers/apiRoutes';
+import AuthContext from './contexts/authContext';
+
+const Auth = ({ children }) => {
+  const [userCredentials, setUserCredentials] = useState(null);
+
+  useEffect(() => {
+    fetch(apiRoutes.auth, { credentials: "include" })
+      .then(res => res.json())
+      .then(user => {
+        typeof user === "object" ? setUserCredentials(user) : setUserCredentials(null);
+      })
+      .catch((error) => {
+        setUserCredentials(null);
+          throw error;
+      })
+  }, [userCredentials]);
+
+  return (
+    <AuthContext.Provider value={{ userCredentials, setUserCredentials }}>
+      {children}
+    </AuthContext.Provider>);
+}
+
 
 const App = () => {
-  const [notificationData, setNotificationData] = useState({show: false});
+  const [notificationData, setNotificationData] = useState({ show: false });
 
   const updateNotification = (type, message) => {
     setNotificationData({
@@ -37,6 +61,9 @@ const App = () => {
     update: updateNotification,
     reset: resetNotification
   }
+
+
+
   // constructor(props){
   //   super(props)
   //   this.state = {
@@ -68,33 +95,31 @@ const App = () => {
   //   }
   // }
 
-    return (
-      <>
-        <NotificationContext.Provider value={notificationValue}>
-          <Header />
-          {notificationData.show && <Notification type={notificationData.type} message={notificationData.message} />}
-          <JumbotronWrapper />
+  return (
+    <Auth>
+      <NotificationContext.Provider value={notificationValue}>
+        <Header />
+        {notificationData.show && <Notification type={notificationData.type} message={notificationData.message} />}
+        <JumbotronWrapper />
 
+        <Switch>
+          <Layout>
+            <Route path="/" exact component={Home} />
+            <Route path="/about" exact component={About} />
+            <Route path="/demo" exact component={Demo} />
+            <Route path="/demo2" exact component={Demo2} />
 
-          <Switch>
-            <Layout>
-              <Route path="/" exact component={Home} />
-              <Route path="/about" exact component={About} />
-              <Route path="/demo" exact component={Demo} />
-              <Route path="/demo2" exact component={Demo2} />
-              
-              <Route path="/user/register" exact component={Register} />
-              <Route path="/user/signIn" exact component={SignIn} />
+            <Route path="/user/register" exact component={Register} />
+            <Route path="/user/signIn" exact component={SignIn} />
 
-              <Route path="/categories" exact component={Categories} />
-            </Layout>
-          </Switch>
+            <Route path="/categories" exact component={Categories} />
+          </Layout>
+        </Switch>
 
-
-          <Footer />
-        </NotificationContext.Provider>
-      </>
-    );
+        <Footer />
+      </NotificationContext.Provider>
+    </Auth >
+  );
 }
 
 export default App;
