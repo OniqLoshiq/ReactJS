@@ -5,7 +5,7 @@ const apiRoutes = {
     register: `${url}/users/register`,
     singIn: `${url}/users/signIn`,
     logout: `${url}/users/logout`,
-
+    auth: `${url}/users/auth`
 }
 
 
