@@ -19,7 +19,7 @@ const Demo2 = () => {
                 selector: 'textarea',
                 menubar: 'edit view format tools table insert',
                 plugins: [
-                    'advlist autolink lists link image hr table charmap print preview anchor',
+                    'advlist autolink lists link image imagetools hr table charmap print preview anchor',
                     'searchreplace visualblocks code quickbars paste media',
                     'insertdatetime media table paste code help wordcount'
                 ],
@@ -29,9 +29,8 @@ const Demo2 = () => {
                         bullist numlist outdent indent | removeformat | image imagetools media help | \
                         table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
                 image_caption: true,
-                image_advtab: true
-
-
+                image_advtab: true,
+                imagetools_toolbar: 'rotateleft rotateright | flipv fliph | editimage imageoptions'
             }}
             onEditorChange={handleEditorChange}
         />
