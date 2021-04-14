@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext } from 'react'
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { useState, useEffect } from 'react'
+import { Switch, Route, useHistory } from 'react-router-dom';
 import Header from './components/Header/Header';
 import JumbotronWrapper from './components/JumbotronWrapper/JumbotronWrapper'
 import Layout from './components/Layout/Layout';
@@ -17,38 +17,30 @@ import Register from './components/User/Register';
 import SignIn from './components/User/SignIn';
 import apiRoutes from './helpers/apiRoutes';
 import AuthContext from './contexts/authContext';
-import authService from './services/authService';
+import usersService from './services/usersService';
+import ListUsers from './components/User/ListUsers';
 
-const Auth = ({ children }) => {
-  const auth = useContext(AuthContext);
+
+const App = () => {
+  const [userCredentials, setUserCredentials] = useState(null);
+  const [notificationData, setNotificationData] = useState({ show: false });
+  const history = useHistory();
 
   useEffect(() => {
     fetch(apiRoutes.auth, { credentials: "include" })
       .then(res => res.json())
       .then(user => {
         if (typeof user === "object") {
-          auth.setUserCredentials(user)
+          setUserCredentials(user)
         } else {
-          auth.setUserCredentials(null);
+          setUserCredentials(null);
         }
       })
       .catch((error) => {
-        auth.setUserCredentials(null);
+        setUserCredentials(null);
         throw error;
       })
   }, []);
-
-  return (
-    <>
-      {children}
-    </>
-  );
-}
-
-
-const App = () => {
-  const [userCredentials, setUserCredentials] = useState(null);
-  const [notificationData, setNotificationData] = useState({ show: false });
 
   const updateNotification = (type, message) => {
     setNotificationData({
@@ -68,8 +60,6 @@ const App = () => {
     update: updateNotification,
     reset: resetNotification
   }
-
-
 
   // constructor(props){
   //   super(props)
@@ -104,9 +94,8 @@ const App = () => {
 
   return (
     <AuthContext.Provider value={{ userCredentials, setUserCredentials }}>
-      <Auth>
         <NotificationContext.Provider value={notificationValue}>
-          <Header username={userCredentials?.username} />
+          <Header username={userCredentials?.username}/>
 
           {notificationData.show && <Notification type={notificationData.type} message={notificationData.message} />}
           <JumbotronWrapper />
@@ -120,13 +109,18 @@ const App = () => {
 
               <Route path="/user/register" exact component={Register} />
               <Route path="/user/signIn" exact component={SignIn} />
+              <Route path="/user/list" exact component={ListUsers} />
               <Route path="/user/logout" exact render={() => {
-                  authService.logOut().then(text => {
-                    notificationValue.update("success", text);
-                    setUserCredentials(null);
-                    return <Redirect to="/" />
+                usersService.logOut().then(text => {
+                  setUserCredentials(null);
+                  console.log(text)
+                  history.push('/')
+                })
+                  .catch(err => {
+                    console.log(err);
+                    history.push('/')
                   })
-                }} 
+              }}
               />
 
               <Route path="/categories" exact component={Categories} />
@@ -135,7 +129,6 @@ const App = () => {
 
           <Footer />
         </NotificationContext.Provider>
-      </Auth >
     </AuthContext.Provider>
   );
 }
