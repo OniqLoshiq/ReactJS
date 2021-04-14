@@ -4,13 +4,13 @@ const User = require('../models/User');
 const ROLE = require('../common/roles');
 
 async function getUserByUsername(username) {
-    let user = await User.findOne({ username: username });
+    let user = await User.findOne({ username: username }).exec();
 
     return user;
 }
 
 async function isFirstUser(){
-    let count = await User.countDocuments({});
+    let count = await User.countDocuments({}).exec();
 
     return count < 1;
 }
@@ -34,7 +34,7 @@ module.exports = {
         let count;
 
         try {
-            count = await User.countDocuments({ username: data.username});
+            count = await User.countDocuments({ username: data.username}).exec();
             
             if(count > 0) throw { message: 'Username is already taken!' }; 
         } catch (err) {
@@ -42,7 +42,7 @@ module.exports = {
         }
 
         try {
-            count = await User.countDocuments({ email: data.email });
+            count = await User.countDocuments({ email: data.email }).exec();
             if(count > 0) throw { message: 'Email is already taken!' } 
         } catch (err) {
             throw { message: err.message } 
@@ -62,23 +62,23 @@ module.exports = {
     async getAll(search) {
         if(search) {
             let regex = new RegExp(search,'i');
-            const users = await User.find({ $or: [{username: regex },{firstName: regex}, {lastName: regex}, {email: regex}] });
+            const users = await User.find({ $or: [{username: regex },{firstName: regex}, {lastName: regex}, {email: regex}] }).exec();
             return users;
         }
 
-        const users = await User.find({});
+        const users = await User.find({}).exec();
 
         return users;
     },
 
     async getOne(id){
-        const user = await User.findOne({_id: id});
+        const user = await User.findById({_id: id}).exec();
 
         return user;
     },
 
     async updateRole(userId, newRole){
-        const result = await User.findOneAndUpdate({_id: userId}, {role: newRole});
+        const result = await User.findOneAndUpdate({_id: userId}, {role: newRole}).exec();
         return result;
     },
 
