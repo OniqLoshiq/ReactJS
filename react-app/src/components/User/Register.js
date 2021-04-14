@@ -15,7 +15,7 @@ import { Formik } from 'formik';
 import CommonInput from '../FormFields/CommonInput';
 import defaultProfilePicture from '../../assets/img/person-reading-book.png'
 import { registerValidations as validations } from '../../helpers/formValidations';
-import authService from '../../services/authService';
+import usersService from '../../services/usersService';
 import NotificationContext from "../../contexts/notificationContext";
 
 const Register = () => {
@@ -57,7 +57,7 @@ const Register = () => {
             validationSchema={schema}
             onSubmit={async (values) => {
                 try {
-                    const result = await authService.register(values, previewPicture);
+                    const result = await usersService.register(values, previewPicture);
                     notification.update('success', result);
                     if (customServerError) setCustomServerError(null);
                     

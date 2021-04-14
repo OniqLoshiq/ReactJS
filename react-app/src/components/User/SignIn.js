@@ -12,7 +12,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { signInValidations as validations } from '../../helpers/formValidations';
 import CommonInput from '../FormFields/CommonInput';
-import authService from '../../services/authService';
+import usersService from '../../services/usersService';
 import NotificationContext from "../../contexts/notificationContext";
 import AuthContext from "../../contexts/authContext";
 
@@ -33,7 +33,7 @@ const SignIn = () => {
             validationSchema={schema}
             onSubmit={async (values) => {
                 try {
-                    const result = await authService.signIn(values);
+                    const result = await usersService.signIn(values);
                     auth.setUserCredentials(result);
                     notification.update('success', 'Sign in was successfull');
                     if (customServerError) setCustomServerError(null);
