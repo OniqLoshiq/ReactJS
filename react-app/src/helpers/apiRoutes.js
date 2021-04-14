@@ -8,6 +8,10 @@ const apiRoutes = {
         logout: `${url}/users/logout`,
         auth: `${url}/users/auth`,
         main: `${url}/users`,
+    },
+    category: {
+        main: `${url}/categories`,
+        list: `${url}/categories/list`
     }
 }
 
