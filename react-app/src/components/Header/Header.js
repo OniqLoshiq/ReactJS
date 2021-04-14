@@ -19,6 +19,7 @@ const Header = ({
                         <Nav.Item><Link to="/">Home</Link></Nav.Item>
                         <Nav.Item><Link to="/about">About us</Link></Nav.Item>
                         <Nav.Item><Link to="/categories">Categories</Link></Nav.Item>
+                        <Nav.Item><Link to="/categories/create">Create Cat</Link></Nav.Item>
                         <Nav.Item><Link to="/demo">Demo</Link></Nav.Item>
                         <Nav.Item><Link to="/demo2">Demo2</Link></Nav.Item>
                     </Nav>

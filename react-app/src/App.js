@@ -19,6 +19,7 @@ import apiRoutes from './helpers/apiRoutes';
 import AuthContext from './contexts/authContext';
 import usersService from './services/usersService';
 import ListUsers from './components/User/ListUsers';
+import CreateCategory from './components/Category/CreateCategory';
 
 
 const App = () => {
@@ -114,6 +115,7 @@ const App = () => {
               <Route path="/about" exact component={About} />
               <Route path="/demo" exact component={Demo} />
               <Route path="/demo2" exact component={Demo2} />
+              <Route path="/categories/create" exact component={CreateCategory} />
 
               <Route path="/user/register" exact component={Register} />
               <Route path="/user/signIn" exact component={SignIn} />
