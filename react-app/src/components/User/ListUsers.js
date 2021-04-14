@@ -24,7 +24,8 @@ const ListUsers = () => {
                 }
                 notifications.timeout("danger", err);
             })
-    }, [search, notifications])
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [search])
 
     const renderUsers = useMemo(() => {
         return users.map((user, index) => {
