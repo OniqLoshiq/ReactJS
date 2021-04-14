@@ -24,7 +24,7 @@ router.post('/', isAuth, authRoleNotBasic, async (req, res) => {
 
     try {
         const newCategory = await category.save();
-        res.status(201).json(newCategory);
+        res.status(201).json('Category successfully created!');
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
@@ -34,7 +34,7 @@ router.post('/', isAuth, authRoleNotBasic, async (req, res) => {
 // Getting all
 router.get('/', async (req, res) => {
     try {
-        const categories = await Category.find({});
+        const categories = await Category.find({}).exec();
 
         res.json(categories);
     } catch (err) {
