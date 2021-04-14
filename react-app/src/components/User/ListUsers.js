@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext, useCallback, useMemo } from 'react';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
@@ -6,18 +6,48 @@ import Button from 'react-bootstrap/Button';
 import styled from 'styled-components';
 import TableRowUser from './TableRowUser';
 import usersService from '../../services/usersService';
+import NotificationContext from '../../contexts/notificationContext';
 
 const ListUsers = () => {
-    const [users, setUsers] = useState(null);
+    const [users, setUsers] = useState([]);
     const [search, setSearch] = useState('')
+    const notifications = useContext(NotificationContext);
 
-    useEffect(() => {
+    const getUsers = useCallback(() => {
         usersService.getAll(search)
             .then(res => {
-                setUsers(res)})
-    }, [search]);
+                setUsers(res)
+            })
+            .catch(err => {
+                if (typeof err === "object") {
+                    throw err;
+                }
+                notifications.timeout("danger", err);
+            })
+    }, [search, notifications])
 
-    const handleSearchClick= (e) => {
+    const renderUsers = useMemo(() => {
+        return users.map((user, index) => {
+            return (
+                <TableRowUser
+                    key={user.id}
+                    id={user.id}
+                    number={index + 1}
+                    username={user.username}
+                    firstName={user.firstName}
+                    lastName={user.lastName}
+                    email={user.email}
+                    role={user.role}
+                />
+            )
+        })
+    }, [users])
+
+    useEffect(() => {
+        getUsers();
+    }, [getUsers]);
+
+    const handleSearchClick = (e) => {
         e.preventDefault();
         setSearch(e.target["search"].value);
     }
@@ -40,16 +70,7 @@ const ListUsers = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {users ? users.map((user, index) =>  
-                    <TableRowUser 
-                        key={user.id}
-                        number={index + 1}
-                        username={user.username}
-                        firstName={user.firstName}
-                        lastName={user.lastName}
-                        email={user.email}
-                        role={user.role}
-                    />) : <tr><td colSpan="6">No results found</td></tr>}
+                    {users.length > 0 ? renderUsers : <tr><td colSpan="6">No results found</td></tr>}
                 </tbody>
             </Table>
         </Styles>

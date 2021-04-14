@@ -56,9 +56,17 @@ const App = () => {
     })
   }
 
+  const setTimeoutNotification = (type, message) => {
+    updateNotification(type, message);
+    setTimeout(() => {
+      resetNotification();
+    }, 1000);
+  }
+
   const notificationValue = {
     update: updateNotification,
-    reset: resetNotification
+    reset: resetNotification,
+    timeout: setTimeoutNotification
   }
 
   // constructor(props){

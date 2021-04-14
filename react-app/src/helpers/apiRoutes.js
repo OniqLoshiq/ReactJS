@@ -7,7 +7,7 @@ const apiRoutes = {
         signIn: `${url}/users/signin`,
         logout: `${url}/users/logout`,
         auth: `${url}/users/auth`,
-        getAll: `${url}/users`,
+        main: `${url}/users`,
     }
 }
 

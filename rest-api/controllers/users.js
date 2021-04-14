@@ -7,17 +7,17 @@ const usersService = require('../services/usersService');
 const permission = require('../middlewares/permissions');
 
 //Register
-router.post('/register', isGuest, async(req,res) => {
-    try{
+router.post('/register', isGuest, async (req, res) => {
+    try {
         const createdUser = await usersService.register(req.body);
 
         res.status(201).json('You have successfully registered');
     } catch (err) {
-        if(err.message.endsWith('is already taken!')){
+        if (err.message.endsWith('is already taken!')) {
             return res.status(400).json(err.message);
         }
         console.log(err);
-        res.status(500).json({message: err.message});
+        res.status(500).json({ message: err.message });
     }
 });
 
@@ -25,13 +25,13 @@ router.post('/register', isGuest, async(req,res) => {
 router.post('/signin', isGuest, async (req, res) => {
     const { username, password } = req.body;
 
-    try{
+    try {
         const [user, token] = await usersService.singIn(username, password);
         const credentials = usersService.getCredentials(user);
 
-        res.cookie(COOKIE_NAME, token, {sameSite:"none", secure: true, expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 5))});
+        res.cookie(COOKIE_NAME, token, { sameSite: "none", secure: true, expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 5)) });
         res.json(credentials);
-    } catch (err){
+    } catch (err) {
         res.status(401).json(err.message);
     }
 })
@@ -41,7 +41,7 @@ router.post('/logout', isAuth, (req, res) => {
     const token = req.cookies[COOKIE_NAME];
     BlackListToken.create({ token })
         .then(() => {
-            res.clearCookie(COOKIE_NAME, {sameSite:"none", secure: true});
+            res.clearCookie(COOKIE_NAME, { sameSite: "none", secure: true });
             res.json('You have successfully logged out!')
         }).catch(err => {
             res.status(500).json({ message: err.message });
@@ -49,8 +49,8 @@ router.post('/logout', isAuth, (req, res) => {
 });
 
 //Get credentials
-router.get('/auth', async(req,res) => {
-    if(req.user){
+router.get('/auth', async (req, res) => {
+    if (req.user) {
         const user = await usersService.getOne(req.user._id);
         const credentials = usersService.getCredentials(user);
 
@@ -61,28 +61,41 @@ router.get('/auth', async(req,res) => {
 })
 
 //Getting all
-router.get('/', isAuth, authRoleAdmin, async (req, res) =>{
-    try{    
+router.get('/', isAuth, authRoleAdmin, async (req, res) => {
+    try {
         const search = req.query.search;
-        
+
         const users = await usersService.getAll(search);
         res.json(users);
-    } catch(err){
-        res.status(500).json({message: err.message});
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 });
 
 //Getting one
 router.get('/:id', isAuth, permission, async (req, res) => {
-    try{
+    try {
         const user = await usersService.getOne(req.params.id);
         res.json(user);
-    } catch (err){
+    } catch (err) {
         res.status(500).json({ message: err.message });
     }
 });
 
-//Editing one
+//Editting one
+
+
+//Editting role
+router.patch('/:id', isAuth, authRoleAdmin, async (req, res) => {
+    const newRole = req.body.role;
+
+    try {
+        const result = await usersService.updateRole(req.params.id, newRole);
+        return res.json(result);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 
 
 module.exports = router;

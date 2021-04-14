@@ -1,6 +1,26 @@
+import { useState } from 'react';
+import usersService from '../../services/usersService';
 
+const TableRowUser = ({ number, id, username, firstName, lastName, email, role }) => {
+    const [roleState, setRoleState] = useState(role);
+    const [isDisabled, setIsDisabled] = useState(true);
 
-const TableRowUser = ({number, username, firstName, lastName, email, role}) => {
+    const handleSelectChange = ({ target: { value } }) => {
+        if (value === roleState) {
+            setIsDisabled(true)
+        } else {
+            setRoleState(value);
+            setIsDisabled(false);
+        }
+    }
+
+    const handleUpdateClick = () => {
+        usersService.updateRole(id, roleState)
+            .then(res => {
+                setIsDisabled(true)
+            })
+    }
+
     return (
         <tr>
             <td>{number}</td>
@@ -9,12 +29,12 @@ const TableRowUser = ({number, username, firstName, lastName, email, role}) => {
             <td>{lastName}</td>
             <td>{email}</td>
             <td>
-                <select>
+                <select value={roleState} onChange={handleSelectChange}>
                     <option value="admin">Admin</option>
                     <option value="moderator">Moderator</option>
                     <option value="basic">Basic</option>
                 </select>
-                <button>Update</button>
+                <button onClick={handleUpdateClick} disabled={isDisabled}>Update</button>
             </td>
         </tr>
     )

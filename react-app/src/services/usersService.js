@@ -59,10 +59,30 @@ const usersService = {
     },
 
     getAll: (search) => {
-        return fetch(`${apiRoutes.user.getAll}${search ? `?search=${search}` : ''}`, {
+        return fetch(`${apiRoutes.user.main}${search ? `?search=${search}` : ''}`, {
             credentials: "include"
         })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) {
+                return res.text().then(text => Promise.reject(text));
+            }
+            return res.json()})
+    },
+
+    updateRole: (userId, newRole) => {
+        return fetch(`${apiRoutes.user.main}/${userId}`, {
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: "include",
+            body: JSON.stringify({role: newRole})
+        })
+        .then(res => {
+            if (!res.ok) {
+                return res.text().then(text => Promise.reject(text));
+            }
+            return res.json()})
     }
 }
 

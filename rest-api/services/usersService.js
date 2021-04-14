@@ -77,6 +77,11 @@ module.exports = {
         return user;
     },
 
+    async updateRole(userId, newRole){
+        const result = await User.findOneAndUpdate({_id: userId}, {role: newRole});
+        return result;
+    },
+
     getCredentials(user){
         const credentials = Object.create({});
         credentials.id = user._id;
