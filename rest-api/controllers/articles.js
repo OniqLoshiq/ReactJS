@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-
 const Article = require('../models/Article');
+const { isAuth, authRoleNotBasic } = require('../middlewares/auth');
 
 // Getting all
 router.get('/', async (req, res) => {
     try {
-        const articles = await Article.find();
+        const articles = await Article.find({}).exec();
         res.json(articles);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -14,9 +14,9 @@ router.get('/', async (req, res) => {
 });
 
 //Getting all personal
-router.get('/personal', async(req, res) => {
+router.get('/personal', isAuth, async(req, res) => {
     try {
-        const articles = await Article.find(a => a.author === req.user.Id);
+        const articles = await Article.find(a => a.author === req.user.Id).exec();
         require.json(articles);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -25,11 +25,11 @@ router.get('/personal', async(req, res) => {
 
 // Getting one
 router.get('/:id', getArticle, (req, res) => {
-    res.json(req.article);
+    res.json(res.article);
 });
 
 // Creating one
-router.post('/:id', getArticle, async (req, res) => {
+router.post('/', isAuth, async (req, res) => {
     const { title, description, frontPicture, categoryId, authorId } = req.body;
     const article = new Article({
         title,
@@ -56,7 +56,7 @@ router.patch('/:id', getArticle, (req, res) => {
 router.delete('/:id', getArticle, async (req, res) => {
     try {
         await req.article.remove();
-        res.json({ message: 'Article deleted!' })
+        res.json('Article deleted!')
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -65,15 +65,15 @@ router.delete('/:id', getArticle, async (req, res) => {
 async function getArticle(req, res, next) {
     let article;
     try {
-        article = await Article.findById(req.params.id);
+        article = await Article.findById(req.params.id).exec();
         if (!article) {
-            res.status(404).json({ message: 'Cannot find article!' })
+            return res.status(404).json('Cannot find article!')
         }
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        return res.status(500).json({ message: err.message });
     }
 
-    req.article = article;
+    res.article = article;
     next();
 };
 
