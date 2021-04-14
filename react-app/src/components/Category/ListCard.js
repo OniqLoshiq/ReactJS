@@ -1,22 +1,22 @@
 import { Link } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
-import sky from '../../assets/img/sky.jpg';
 
 import styled from 'styled-components';
 
-const ListCard = () => {
+const ListCard = ({ id, name, description, picture, articles }) => {
     return (
         <Styles>
             <Card>
-                <Link to="/categories/:id">
-                    <Card.Img variant="top" src={sky} />
+                <Link to={`/categories/${id}`}>
+                    <Card.Img variant="top" src={picture} />
                     <Card.ImgOverlay>
-                        <Card.Title className="title-normal">Science</Card.Title>
-                        <Card.Title className="title-on-hover">The pursuit and application of knowledge and understanding of the natural and social world following a systematic methodology based on evidence
-                        <button type="button">View Resources</button>
+                        <Card.Title className="title-normal">{name}</Card.Title>
+                        <Card.Title className="title-on-hover">
+                            {description}
+                            <button type="button">View Resources</button>
                         </Card.Title>
                         <Card.Text>
-                            <span>Unique articles: 30</span>
+                            <span>Unique articles: {articles}</span>
                         </Card.Text>
                     </Card.ImgOverlay>
                 </Link>
@@ -35,7 +35,7 @@ const Styles = styled.div`
 
     .card{
         border: none;
-
+        
         &:hover .title-on-hover{
             display: block;
             @supports (-webkit-line-clamp: 2) {
@@ -45,15 +45,19 @@ const Styles = styled.div`
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
+            color:red;
         }
         }
 
         &:hover .title-normal{
             display: none;
+            color:red;
         }
 
         &:hover .card-img-overlay{
             cursor: pointer;     
+            color:red;
+            border-radius: 20px;
             background-color: rgba(232, 232, 232, 0.2);
 
         }
