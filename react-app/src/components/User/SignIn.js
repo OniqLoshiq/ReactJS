@@ -97,7 +97,6 @@ const SignIn = () => {
                             </Form>
                         </Col>
                     </Row>
-                    <pre>{JSON.stringify(values, null, 2)}</pre>
                     <div className="inner-footer">
                         Your privacy is our mission &hearts; "Ho-ho-ha-ha"
             </div>

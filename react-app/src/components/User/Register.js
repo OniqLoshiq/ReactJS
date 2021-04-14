@@ -200,7 +200,6 @@ const Register = () => {
                                 Become a member
                             </Button>
                         </div>
-                        <pre>{JSON.stringify(values, null, 2)}</pre>
                     </Form>
                 </Styles>
             )}
@@ -242,6 +241,7 @@ const Styles = styled.div`
         border-right: 0;
         border-radius: 0;
         border-bottom: 1px solid blue;
+        outline: none;
 
         &:focus, &:active {
             box-shadow: none
