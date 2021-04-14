@@ -63,7 +63,9 @@ router.get('/auth', async(req,res) => {
 //Getting all
 router.get('/', isAuth, authRoleAdmin, async (req, res) =>{
     try{    
-        const users = await usersService.getAll();
+        const search = req.query.search;
+        
+        const users = await usersService.getAll(search);
         res.json(users);
     } catch(err){
         res.status(500).json({message: err.message});

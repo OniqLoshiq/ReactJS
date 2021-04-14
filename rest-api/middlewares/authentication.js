@@ -14,7 +14,7 @@ function verifyToken(token) {
 module.exports = function () {
     return (req, res, next) => {
         let token = req.cookies[COOKIE_NAME];
-
+        
         if (token) {
             Promise.all([
                 verifyToken(token),

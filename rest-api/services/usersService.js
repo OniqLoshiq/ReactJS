@@ -59,7 +59,13 @@ module.exports = {
         return user.save();
     },
 
-    async getAll() {
+    async getAll(search) {
+        if(search) {
+            let regex = new RegExp(search,'i');
+            const users = await User.find({ $or: [{username: regex },{firstName: regex}, {lastName: regex}, {email: regex}] });
+            return users;
+        }
+
         const users = await User.find({});
 
         return users;
