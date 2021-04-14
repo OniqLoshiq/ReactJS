@@ -33,10 +33,10 @@ const registerValidations = {
     repeatPassword: Yup.string().required('Repeat password is required').when("password", {
         is: val => (val && val.length > 0 ? true : false),
         then: Yup.string().oneOf(
-          [Yup.ref("password")],
-          "Both passwords should match"
+            [Yup.ref("password")],
+            "Both passwords should match"
         )
-      })
+    })
 }
 
 const signInValidations = {
@@ -46,10 +46,26 @@ const signInValidations = {
         .max(15, 'Enter valid username'),
 
     password: Yup.string()
-    .required('Password is required')
+        .required('Password is required')
+}
+
+const categoryValidations = {
+    name: Yup.string()
+        .required('Name is required')
+        .min(3, 'Name must be at least 3 chars long')
+        .max(25, 'Name must be maximum 25 chars long'),
+
+    picture: Yup.mixed()
+        .required('Picture as poster is required'),
+
+    description: Yup.string()
+        .required('Description is required')
+        .min(15, 'Description must be at least 15 chars long')
+        .max(350, 'Description must be maximum 350 chars long')
 }
 
 export {
     registerValidations,
-    signInValidations
+    signInValidations,
+    categoryValidations
 }
