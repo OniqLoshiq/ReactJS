@@ -3,6 +3,8 @@ const router = express.Router();
 const Category = require('../models/Category');
 const { isAuth, authRoleNotBasic } = require('../middlewares/auth');
 
+
+
 //Create
 router.post('/', isAuth, authRoleNotBasic, async (req, res) => {
     const { name, description, picture } = req.body;
@@ -13,7 +15,7 @@ router.post('/', isAuth, authRoleNotBasic, async (req, res) => {
 
         if (count > 0) throw { message: 'This category already exists!' };
     } catch (err) {
-        throw { message: err.message }
+        return res.status(400).json(err.message);
     }
 
     const category = new Category({
@@ -30,17 +32,20 @@ router.post('/', isAuth, authRoleNotBasic, async (req, res) => {
     }
 });
 
-
 // Getting all
 router.get('/', async (req, res) => {
     try {
-        const categories = await Category.find({}).exec();
-
+        const  categories = req.query.list ? 
+                    await Category.find({}, 'name').exec() : 
+                    await Category.find({}).exec();
+        
         res.json(categories);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 });
+
+
 
 // Getting one
 router.get('/:id', getCategory, async (req, res) => {
@@ -51,16 +56,7 @@ router.get('/:id', getCategory, async (req, res) => {
     }
 });
 
-// Listing for select -> option
-router.get('/list', async (req, res) => {
-    try {
-        const categories = await Category.find({}, 'name').exec();
 
-        res.json(categories);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-});
 
 // Edit one
 router.patch('/:id', isAuth, authRoleNotBasic, getCategory, async (req, res) => {

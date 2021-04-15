@@ -23,6 +23,7 @@ const Styles = styled.div`
         border-right: 0;
         border-radius: 0;
         border-bottom: 1px solid blue;
+        outline: none;
 
         &:focus, &:active {
             box-shadow: none;

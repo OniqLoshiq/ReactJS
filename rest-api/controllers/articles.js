@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Article = require('../models/Article');
+const User = require('../models/User');
 const { isAuth, authRoleNotBasic } = require('../middlewares/auth');
 
 // Getting all
@@ -41,7 +42,8 @@ router.post('/', isAuth, async (req, res) => {
 
     try {
         const newArticle = await article.save();
-        res.status(201).json(newArticle);
+        const updateUser = await User.updateOne({_id: newArticle.author}, {$push: {articles: newArticle._id}}).exec();
+        res.status(201).json('Your article has been published');
     } catch (err) {
         res.status(400).json({ message: err.message });
     }

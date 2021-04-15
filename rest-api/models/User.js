@@ -45,6 +45,10 @@ const userSchema = new mongoose.Schema({
         enum: [ROLE.ADMIN, ROLE.MODERATOR, ROLE.BASIC],
         default: ROLE.BASIC
     },
+    articles: [{
+        type: 'ObjectId',
+        ref: "Article"
+    }]
 }, { timestamps: { createdAt: 'registeredAt' } });
 
 
@@ -52,6 +56,10 @@ userSchema.set('toJSON', { virtuals: true });
 
 userSchema.virtual('fullName').get(function () {
     return this.firstName + ' ' + this.lastName
+});
+
+userSchema.virtual('articlesCount').get(function () {
+    return this.articles.length;
 });
 
 userSchema.methods.verifyPassword = async function (password) {
