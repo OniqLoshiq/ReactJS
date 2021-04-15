@@ -62,7 +62,7 @@ const App = () => {
     updateNotification(type, message);
     setTimeout(() => {
       resetNotification();
-    }, 1000);
+    }, 2000);
   }
 
   const notificationValue = {
