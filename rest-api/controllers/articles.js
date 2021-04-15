@@ -31,13 +31,14 @@ router.get('/:id', getArticle, (req, res) => {
 
 // Creating one
 router.post('/', isAuth, async (req, res) => {
-    const { title, description, frontPicture, categoryId, authorId } = req.body;
+    const { title, subtitle, body, frontPicture, category, author } = req.body;
     const article = new Article({
         title,
-        description,
+        subtitle,
+        body,
         frontPicture,
-        categoryId,
-        authorId
+        category,
+        author
     });
 
     try {

@@ -16,7 +16,7 @@ const articleSchema = new mongoose.Schema({
     body: {
         type: String,
         required: true,
-        minlength: 20,
+        minlength: 20
     },
     frontPicture: {
         type: String,
