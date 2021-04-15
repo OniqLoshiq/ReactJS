@@ -18,7 +18,7 @@ import AuthContext from "../../contexts/authContext";
 
 const SignIn = () => {
     const [customServerError, setCustomServerError] = useState(null);
-    const notification = useContext(NotificationContext);
+    const notifications = useContext(NotificationContext);
     const auth = useContext(AuthContext);
     const history = useHistory();
 
@@ -35,13 +35,10 @@ const SignIn = () => {
                 try {
                     const result = await usersService.signIn(values);
                     auth.setUserCredentials(result);
-                    notification.update('success', 'Sign in was successfull');
                     if (customServerError) setCustomServerError(null);
 
-                    setTimeout(() => {
-                        notification.reset();
-                        history.push('/');
-                    }, 1000);
+                    notifications.timeout("success", 'Sign in was successfull');
+                    history.push('/');
                 } catch (error) {
                     if (typeof error === 'object') {
                         throw error;

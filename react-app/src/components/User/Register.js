@@ -21,7 +21,7 @@ import NotificationContext from "../../contexts/notificationContext";
 const Register = () => {
     const [previewPicture, setPreviewPicture] = useState(defaultProfilePicture);
     const [customServerError, setCustomServerError] = useState(null);
-    const notification = useContext(NotificationContext);
+    const notifications = useContext(NotificationContext);
     const history = useHistory();
 
     const previewFile = (file) => {
@@ -58,20 +58,16 @@ const Register = () => {
             onSubmit={async (values) => {
                 try {
                     const result = await usersService.register(values, previewPicture);
-                    notification.update('success', result);
                     if (customServerError) setCustomServerError(null);
                     
-                    setTimeout(() => {
-                        notification.reset();
-                        history.push('/user/signIn');
-                    }, 1500);
+                    notifications.timeout("success", result);
+                    history.push('/');
                 } catch (error) {
                     if (typeof error === 'object') {
                         throw error;
                     }
                     setCustomServerError(error);
                 }
-
             }}
         >
             {({
