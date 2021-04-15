@@ -55,7 +55,7 @@ const categoryValidations = {
         .min(3, 'Name must be at least 3 chars long')
         .max(25, 'Name must be maximum 25 chars long'),
 
-    picture: Yup.mixed()
+    picture: Yup.string()
         .required('Picture as poster is required'),
 
     description: Yup.string()
@@ -75,15 +75,15 @@ const articleValidations = {
         .min(10, 'Subtitle must be at least 10 chars long')
         .max(255, 'Subtitle must be maximum 255 chars long'),
 
-    // body: Yup.string()
-    //     .required('Description is required')
-    //     .min(20, 'Description must be at least 20 chars long'),
+    body: Yup.string()
+        .required('Description is required')
+        .min(20, 'Description must be at least 20 chars long'),
 
-    frontPicture: Yup.mixed()
+    frontPicture: Yup.string()
         .required('Front picture as poster is required'),
 
     category: Yup.string()
-    .required('Category is required')
+        .required('Category is required'),
 }
 
 export {
