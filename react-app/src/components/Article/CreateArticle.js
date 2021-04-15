@@ -16,6 +16,7 @@ import NotificationContext from "../../contexts/notificationContext";
 import AuthConext from '../../contexts/authContext';
 import articlesService from '../../services/articlesService';
 import CategorySelectList from '../Category/CategorySelectList';
+import MyErrorMessage from '../FormFields/MyErrorMessage';
 
 
 const CreateArticle = () => {
@@ -39,12 +40,11 @@ const CreateArticle = () => {
             validationSchema={schema}
             onSubmit={async (values) => {
                 try {
-                    console.log(values);
                     const result = await articlesService.create(values);
 
                     if (customServerError) setCustomServerError(null);
 
-                    await notifications.timeout("success", result);
+                    notifications.timeout("success", result);
                     history.push('/');
                 } catch (err) {
                     if (typeof err === 'object') {
@@ -58,6 +58,8 @@ const CreateArticle = () => {
                 handleSubmit,
                 handleChange,
                 setFieldValue,
+                touched,
+                errors,
                 isSubmitting
             }) => (
                 <Styles>
@@ -101,6 +103,7 @@ const CreateArticle = () => {
                                     }
                                     }
                                 />
+                                 {touched.frontPicture && errors.frontPicture ? (<MyErrorMessage message={errors.frontPicture} />) : null}
                             </Form.Group>
                             <Form.Group as={Col} lg="4">
                                 <CategorySelectList
@@ -113,6 +116,7 @@ const CreateArticle = () => {
                         <Form.Row>
                             <Col md="9" >
                                 <Form.Label>Body</Form.Label>
+                                {touched.body && errors.body ? (<MyErrorMessage message={errors.body} />) : null}
                                 <TextareaTinyMce
                                     id='body'
                                     name="body"

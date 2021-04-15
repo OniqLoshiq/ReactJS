@@ -1,7 +1,6 @@
 import { Editor } from '@tinymce/tinymce-react';
 import styled from 'styled-components';
 
-
 const TextareaTinyMce = ({id, name, handleChange}) => {
     return (
         <Styles>
@@ -32,7 +31,6 @@ const TextareaTinyMce = ({id, name, handleChange}) => {
                     handleChange({target: {name: 'body', value: e}})
                 }}
             />
-
         </Styles>
     );
 }
