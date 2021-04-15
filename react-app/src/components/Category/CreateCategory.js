@@ -12,6 +12,7 @@ import CommonInput from '../FormFields/CommonInput';
 import { categoryValidations as validations } from '../../helpers/formValidations';
 import NotificationContext from "../../contexts/notificationContext";
 import categoriesService from '../../services/categoriesService';
+import MyErrorMessage from '../FormFields/MyErrorMessage';
 
 //name description picture
 
@@ -35,7 +36,7 @@ const CreateCategory = () => {
                 try{
                     const result = await categoriesService.create(values);
                     if (customServerError) setCustomServerError(null);
-                    await notifications.timeout("success", result);
+                    notifications.timeout("success", result);
                     history.push('/');
                 } catch (err) {
                     if (typeof err === 'object') {
@@ -48,7 +49,8 @@ const CreateCategory = () => {
             {({
                 handleSubmit,
                 setFieldValue,
-                values,
+                errors,
+                touched,
                 isSubmitting
             }) => (
                 <Styles>
@@ -79,6 +81,7 @@ const CreateCategory = () => {
                                         }
                                         }
                                     />
+                                    {touched.picture && errors.picture ? (<MyErrorMessage message={errors.picture} />) : null}
                                 </Form.Group>
                                 <Form.Group>
                                     <CommonInput
