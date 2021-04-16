@@ -11,7 +11,7 @@ const apiRoutes = {
     },
     category: {
         main: `${url}/categories`,
-        list: `${url}/categories?list=`
+        list: `${url}/categories?list=true`
     },
     article: {
         main: `${url}/articles`,
