@@ -8,6 +8,7 @@ import About from './components/About/About';
 import Categories from './components/Category/Categories';
 import Demo from './components/Demo/Demo';
 import Demo2 from './components/Demo/Demo2';
+import ViewArticle from './components/Article/ViewArticle';
 import Footer from './components/Footer/Footer';
 import Notification from './components/Shared/Notification';
 
@@ -24,7 +25,7 @@ import CreateArticle from './components/Article/CreateArticle';
 
 
 const App = () => {
-  const [userCredentials, setUserCredentials] = useState(null);
+  const [userCredentials, setUserCredentials] = useState(null); //id email profilePicture username role
   const [notificationData, setNotificationData] = useState({ show: false });
   const history = useHistory();
 
@@ -118,6 +119,7 @@ const App = () => {
               <Route path="/demo2" exact component={Demo2} />
               <Route path="/category/create" exact component={CreateCategory} />
               <Route path="/article/create" exact component={CreateArticle} />
+              <Route path="/article/:id" exact component={ViewArticle} />
 
               <Route path="/user/register" exact component={Register} />
               <Route path="/user/signIn" exact component={SignIn} />

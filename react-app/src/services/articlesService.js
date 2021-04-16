@@ -37,6 +37,18 @@ const articlesService = {
         })
     },
 
+    getOne: (articleId) => {
+        return fetch(`${apiRoutes.article.main}/${articleId}`, {
+            credentials: "include",
+        }).then(res => {
+            if (!res.ok) {
+                return res.json().then(err => Promise.reject(err))
+            }
+
+            return res.json();
+        })
+    },
+
     delete: () => {
         return null;
     }
