@@ -35,10 +35,10 @@ router.post('/', isAuth, authRoleNotBasic, async (req, res) => {
 // Getting all
 router.get('/', async (req, res) => {
     try {
-        const  categories = req.query.list ? 
-                    await Category.find({}, 'name').exec() : 
+        const  categories =  req.query.list ? 
+                    await Category.find({}, 'name').lean().exec() : 
                     await Category.find({}).exec();
-        
+                    
         res.json(categories);
     } catch (err) {
         res.status(500).json({ message: err.message });
