@@ -87,8 +87,8 @@ async function getCategory(req, res, next) {
 
     try {
         category = shouldPopulateArticles ?
-            await Category.findById(req.params.id).populate('articles').execPopulate() :
-            await Category.findById(req.params.id).exec();
+            await Category.findById(req.params.id).populate('articles').lean().exec() :
+            await Category.findById(req.params.id).lean().exec();
         if (!category) {
             return res.status(404).json('Cannot find category!')
         }

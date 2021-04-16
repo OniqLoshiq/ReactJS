@@ -3,6 +3,7 @@ const router = express.Router();
 const Article = require('../models/Article');
 const User = require('../models/User');
 const { isAuth, authRoleNotBasic } = require('../middlewares/auth');
+const Category = require('../models/Category');
 
 // Getting all
 router.get('/', async (req, res) => {
@@ -57,6 +58,7 @@ router.post('/', isAuth, async (req, res) => {
     try {
         const newArticle = await article.save();
         const updateUser = await User.updateOne({ _id: newArticle.author }, { $push: { articles: newArticle._id } }).exec();
+        const updateCategory = await Category.updateOne({ _id: newArticle.category }, { $push: { articles: newArticle._id } }).exec();
         res.status(201).json('Your article has been published');
     } catch (err) {
         res.status(400).json({ message: err.message });
@@ -81,10 +83,17 @@ router.delete('/:id', getArticle, async (req, res) => {
 async function getArticle(req, res, next) {
     let article;
     try {
-        article = await Article.findById(req.params.id).exec();
+        article = await Article.findById(req.params.id)
+                                .populate('category', 'name')
+                                .populate('author', 'firstName lastName username profilePicture')
+                                .lean()
+                                .exec();
+
         if (!article) {
             return res.status(404).json('Cannot find article!')
         }
+
+        return res.json(article);
     } catch (err) {
         return res.status(500).json({ message: err.message });
     }
@@ -95,41 +104,41 @@ async function getArticle(req, res, next) {
 
 const getFeaturedArticles = async () => {
     const articles = await Article
-                        .aggregate([
-                            {
-                                $lookup: {
-                                    from: 'categories',
-                                    localField: 'category',
-                                    foreignField: '_id',
-                                    as: 'category'
-                                }
-                            },
-                            {$unwind: '$category'},
-                            {
-                                $project:
-                                {
-                                    'title': 1,
-                                    'subtitle': 1,
-                                    'frontPicture': 1,
-                                    'updatedAt': 1,
-                                    'categoryId': '$category._id',
-                                    'categoryName': '$category.name',
-                                    'likesCount': { '$size': '$likes' }
-                                }
-                            },
-                            {
-                                $sort: {
-                                    'likesCount': -1,
-                                    'updatedAt': -1
-                                }
-                            },
-                            { $limit: 6 }
-                        ]).exec();
+        .aggregate([
+            {
+                $lookup: {
+                    from: 'categories',
+                    localField: 'category',
+                    foreignField: '_id',
+                    as: 'category'
+                }
+            },
+            { $unwind: '$category' },
+            {
+                $project:
+                {
+                    'title': 1,
+                    'subtitle': 1,
+                    'frontPicture': 1,
+                    'updatedAt': 1,
+                    'categoryId': '$category._id',
+                    'categoryName': '$category.name',
+                    'likesCount': { '$size': '$likes' }
+                }
+            },
+            {
+                $sort: {
+                    'likesCount': -1,
+                    'updatedAt': -1
+                }
+            },
+            { $limit: 6 }
+        ]).exec();
 
     return articles;
 }
 
-const getLatestArticles =  async () => {
+const getLatestArticles = async () => {
     // const articles = await Article
     //                     .aggregate([
     //                         {
@@ -161,14 +170,14 @@ const getLatestArticles =  async () => {
     //                     ]).exec();
 
     const articles = await Article
-                            .find({}, 'title subtitle frontPicture updatedAt category')
-                            .sort({updatedAt: -1})
-                            .limit(8)
-                            .populate('category', 'name')
-                            .lean()
-                            .exec();
+        .find({}, 'title frontPicture updatedAt category')
+        .sort({ updatedAt: -1 })
+        .limit(8)
+        .populate('category', 'name')
+        .lean()
+        .exec();
 
-    return articles;                     
+    return articles;
 }
 
 
