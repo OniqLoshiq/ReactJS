@@ -2,16 +2,31 @@ import Carousel from 'react-bootstrap/Carousel';
 import LatestCardGroup from './LatestCardGroup';
 import styled from 'styled-components';
 
-const LatestCarousel = () => {
+const LatestCarousel = ({articles}) => {
+
+    const groupArticles = articles.reduce((acc, curr, i) => {
+        if(i === 0 || i === 4){
+            acc.push([curr]);
+        } else {
+            let index = parseInt((i / 4), 10);
+            acc[index].push(curr)
+        }
+
+        return acc;
+    },[]);
+
     return (
         <Styles>
             <Carousel indicators={false} pause='hover'>
-                <Carousel.Item interval={20000}>
-                    <LatestCardGroup />
-                </Carousel.Item>
-                <Carousel.Item interval={20000}>
-                    <LatestCardGroup />
-                </Carousel.Item>
+            {
+                groupArticles.map((ga, i) => {
+                    return (
+                        <Carousel.Item key={i} interval={7000}>
+                            <LatestCardGroup articles={ga} />
+                         </Carousel.Item>
+                    )
+                })
+            }
             </Carousel>
         </Styles>
     )

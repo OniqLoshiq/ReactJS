@@ -1,29 +1,28 @@
 import { Link } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import styled from 'styled-components';
-import tree from '../../assets/img/tree-sunset.jpg';
+import parseDate from '../../helpers/parseDate';
 
 
-const LatestCard = () => {
+const LatestCard = ({ _id, title, frontPicture, updatedAt, category}) => {
+    const parsedUpdatedAt = parseDate(updatedAt);
+
     return (
         <Styles>
             <Card>
-                <Link to="/user/register">
-                    <Card.Img variant="top" src={tree} />
+                <Link to={`/article/${_id}`}>
+                    <Card.Img variant="top" src={frontPicture} />
                     <button type="button">Read More</button>
                     <div className="hover-overlay"></div>
                 </Link>
                 <Card.Body>
-                    <Card.Title>Card title</Card.Title>
-                    <Card.Text>
-                        This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.
-              </Card.Text>
+                    <Card.Title>{title}</Card.Title>
+                    {/* <Card.Text>{subtitle}</Card.Text> */}
                 </Card.Body>
                 <Card.Footer>
                     <small className="text-muted">
-                        <div>Science asd asd eqwsssww</div>
-                        <div>09/04/2021</div>
+                        <div>{category.name}</div>
+                        <div>{parsedUpdatedAt}</div>
                     </small>
                 </Card.Footer>
             </Card>
@@ -43,6 +42,18 @@ const Styles = styled.div`
             z-index: 0;
         }
     }
+
+    .card-img-top{
+        height: 10rem;
+    }
+
+    .card-title{
+        height: 10.5rem;
+    }
+
+    /* .card-text{
+        height: 13rem;
+    } */
 
     img{
         max-width: 16.5rem;

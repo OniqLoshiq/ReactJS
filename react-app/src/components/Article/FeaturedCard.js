@@ -1,9 +1,14 @@
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import parseDate from '../../helpers/parseDate';
+import { faThumbsUp as solThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
-const FeaturedCard = ({_id, title, subtitle, frontPicture, updatedAt, categoryName, categoryId, likesCount}) => {
+const FeaturedCard = ({ _id, title, subtitle, frontPicture, updatedAt, categoryName, categoryId, likesCount }) => {
+    const parsedUpdatedAt = parseDate(updatedAt);
+
     return (
         <Styles>
             <Card className="bg-dark text-white">
@@ -14,8 +19,13 @@ const FeaturedCard = ({_id, title, subtitle, frontPicture, updatedAt, categoryNa
                         <Card.Title>{title}</Card.Title>
                         <Card.Text>
                             {subtitle}
-                    </Card.Text>
-                        <Card.Text><span>{updatedAt}</span><span>{likesCount}</span> </Card.Text>
+                        </Card.Text>
+                       
+                            <small className="text-muted">
+                                <div>{categoryName}</div>
+                                <div>Last updated: {parsedUpdatedAt}</div>
+                                <div><FontAwesomeIcon icon={solThumbsUp} /> {likesCount}</div>
+                            </small>
                     </Card.ImgOverlay>
                 </Link>
             </Card>
@@ -86,6 +96,12 @@ const Styles = styled.div`
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
+    }
+
+    .text-muted{
+        display: flex;
+        justify-content: space-between;
+        color: white !important;
     }
 
     .card-text{

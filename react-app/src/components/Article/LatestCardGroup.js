@@ -3,14 +3,15 @@ import LatestCard from './LatestCard';
 import styled from 'styled-components';
 
 
-const LatestCardGroup = () => {
+const LatestCardGroup = ({articles}) => {
     return (
         <Styles>
             <CardGroup>
-                <LatestCard />
-                <LatestCard />
-                <LatestCard />
-                <LatestCard />
+                {articles.map(a => {
+                    return (
+                        <LatestCard key={a._id} {...a}/>
+                    )
+                })}
             </CardGroup>
         </Styles>
     );
