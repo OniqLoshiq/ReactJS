@@ -25,6 +25,18 @@ const articlesService = {
             })
     },
 
+    getHome: () => {
+        return fetch(`${apiRoutes.article.main}?home=true`, {
+            credentials: "include",
+        }).then(res => {
+            if (!res.ok) {
+                return res.json().then(err => Promise.reject(err))
+            }
+
+            return res.json();
+        })
+    },
+
     delete: () => {
         return null;
     }
