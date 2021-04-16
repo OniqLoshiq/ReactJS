@@ -28,8 +28,6 @@ const Styles = styled.div`
         margin: auto;
    }
 
-   
-
    @media screen and (max-width: 1199px) {
         max-width: 550px;
         margin: auto;

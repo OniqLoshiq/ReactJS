@@ -1,25 +1,35 @@
 import Carousel from 'react-bootstrap/Carousel';
-
 import styled from 'styled-components';
 
 import FeaturedCard from './FeaturedCard';
 
-const FeaturedCarousel = () => {
+const FeaturedCarousel = ({ articles }) => {
+    const articlesArray = articles.reduce((acc, curr, i) => {
+        if (i % 2 === 0) {
+            acc.push([curr]);
+        } else {
+            let index = parseInt((i / 2), 10);
+            acc[index].push(curr)
+        }
+        return acc;
+    }, []);
+
+
+    const renderedArticles = articlesArray.map((aa, i) => {
+        return (
+            <Carousel.Item key={i} interval={5000}>
+                {aa.map(a => {
+                    return <FeaturedCard key={a._id} {...a} />
+                })}
+            </Carousel.Item>
+        );
+    });
+
+
     return (
         <Styles>
-            <Carousel indicators={false} pause='hover'>
-                <Carousel.Item interval={20000}>
-                    <FeaturedCard />
-                    <FeaturedCard />
-                </Carousel.Item>
-                <Carousel.Item interval={20000}>
-                    <FeaturedCard />
-                    <FeaturedCard />
-                </Carousel.Item>
-                <Carousel.Item interval={20000}>
-                    <FeaturedCard />
-                    <FeaturedCard />
-                </Carousel.Item>
+            <Carousel indicators pause='hover'>
+                {articles.length > 0 ? renderedArticles : null}
             </Carousel>
         </Styles>
     );
@@ -63,6 +73,10 @@ const Styles = styled.div`
     .carousel-control-prev{
         padding-right: 3rem;
         padding-bottom: 3rem;
+    }
+
+    .carousel-indicators {
+        margin-bottom: 0;
     }
 
     @media screen and (max-width: 1199px) {

@@ -1,25 +1,21 @@
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import sky from '../../assets/img/sky.jpg';
 
 
-const FeaturedCard = () => {
+const FeaturedCard = ({_id, title, subtitle, frontPicture, updatedAt, categoryName, categoryId, likesCount}) => {
     return (
         <Styles>
             <Card className="bg-dark text-white">
-                <Link to="/user/signIn">
-                    <Card.Img src={sky} alt="Card image" />
+                <Link to={`/article/${_id}`}>
+                    <Card.Img src={frontPicture} alt="Article" />
                     <button type="button">Read More</button>
                     <Card.ImgOverlay>
-                        <Card.Title>Card title</Card.Title>
+                        <Card.Title>{title}</Card.Title>
                         <Card.Text>
-                            This is a wider card with supporting text below as a natural lead-in to
-                            additional content. This content is a little bit longer. This is a wider card with supporting text below as a natural lead-in to
-                            additional content. This content is a little bit longer. This is a wider card with supporting text below as a natural lead-in to
-                            additional content. This content is a little bit longer.
+                            {subtitle}
                     </Card.Text>
-                        <Card.Text>Last updated 3 mins ago</Card.Text>
+                        <Card.Text><span>{updatedAt}</span><span>{likesCount}</span> </Card.Text>
                     </Card.ImgOverlay>
                 </Link>
             </Card>
