@@ -4,13 +4,11 @@ import Header from './components/Header/Header';
 import JumbotronWrapper from './components/JumbotronWrapper/JumbotronWrapper'
 import Layout from './components/Layout/Layout';
 import Home from './components/Home/Home';
-import About from './components/About/About';
 import Categories from './components/Category/Categories';
-import Demo from './components/Demo/Demo';
-import Demo2 from './components/Demo/Demo2';
 import ViewArticle from './components/Article/ViewArticle';
 import Footer from './components/Footer/Footer';
 import Notification from './components/Shared/Notification';
+// import ErrorPage from './pages/ErrorPage';
 
 import NotificationContext from './contexts/notificationContext';
 
@@ -24,6 +22,10 @@ import CreateCategory from './components/Category/CreateCategory';
 import CreateArticle from './components/Article/CreateArticle';
 import EditArticle from './components/Article/EditArticle';
 import ViewCategory from './components/Category/ViewCategory';
+import isAuth from './hoc/isAuth';
+import isGuest from './hoc/isGuest';
+import isAdmin from './hoc/isAdmin';
+import isNotBasic from './hoc/isNotBasic';
 
 
 const App = () => {
@@ -74,79 +76,52 @@ const App = () => {
     timeout: setTimeoutNotification
   }
 
-  // constructor(props){
-  //   super(props)
-  //   this.state = {
-  //     shouldFormatHeader: false,
-  //     pageYOffset: 0
-  //   }
-
-  //   componentDidMount() {
-  //     window.addEventListener('scroll', this.props.handleScroll);
-  // }
-
-  // componentWillUnmount(){
-  //     window.removeEventListener('scroll', this.props.handleScroll)
-  // }
-
-  //   this.handleScroll = this.handleScroll.bind(this);
-  // }
-
-  // handleScroll(){
-  //   this.setState({ 
-  //     pageYOffset: window.pageYOffset,
-  //     shouldFormatHeader: this.state.pageYOffset < 344 ? false : true
-  //   });
-  // }
-
-  // componentDidUpdate(prevProps, prevState){
-  //   if(this.state.shouldFormatHeader === prevState.shouldFormatHeader){
-  //     return;
-  //   }
-  // }
-
   return (
     <AuthContext.Provider value={{ userCredentials, setUserCredentials }}>
-        <NotificationContext.Provider value={notificationValue}>
-          <Header username={userCredentials?.username}/>
+      <NotificationContext.Provider value={notificationValue}>
 
-          {notificationData.show && <Notification type={notificationData.type} message={notificationData.message} />}
-          <JumbotronWrapper />
+        <Header username={userCredentials?.username} role={userCredentials?.role} profilePicture={userCredentials?.profilePicture} />
 
-          <Switch>
-            <Layout>
-              <Route path="/" exact component={Home} />
-              <Route path="/about" exact component={About} />
-              <Route path="/demo" exact component={Demo} />
-              <Route path="/demo2" exact component={Demo2} />
-              <Route path="/category/create" exact component={CreateCategory} />
-              <Route path="/category/:id" exact component={ViewCategory} />
-              <Route path="/article/create" exact component={CreateArticle} />
-              <Route path="/article/:id" exact component={ViewArticle} />
-              <Route path="/article/edit/:id" exact component={EditArticle} />
+        {notificationData.show && <Notification type={notificationData.type} message={notificationData.message} />}
+        <JumbotronWrapper />
 
-              <Route path="/user/register" exact component={Register} />
-              <Route path="/user/signIn" exact component={SignIn} />
-              <Route path="/user/list" exact component={ListUsers} />
-              <Route path="/user/logout" exact render={() => {
-                usersService.logOut().then(text => {
-                  setUserCredentials(null);
-                  console.log(text)
-                  history.push('/')
-                })
-                  .catch(err => {
-                    console.log(err);
+        <Switch>
+          <Layout>
+            <Route path="/" exact component={Home} />
+            <Route path="/categories" exact component={Categories} />
+            <Route path="/category/create" exact component={isAuth(isAdmin(CreateCategory))} />
+            <Route path="/category/:id" exact component={ViewCategory} />
+            <Route path="/article/create" exact component={isAuth(CreateArticle)} />
+            <Route path="/article/:id" exact component={ViewArticle} />
+            <Route path="/article/edit/:id" exact component={isAuth(isNotBasic(EditArticle))} />
+
+            <Route path="/user/register" exact component={isGuest(Register)} />
+            <Route path="/user/signIn" exact component={isGuest(SignIn)} />
+            <Route path="/user/list" exact component={isAuth(isAdmin(ListUsers))} />
+
+            {
+              userCredentials?.username && (
+                <Route path="/user/logout" exact render={() => {
+                  usersService.logOut().then(text => {
+                    setUserCredentials(null);
+                    console.log(text)
                     history.push('/')
                   })
-              }}
-              />
+                    .catch(err => {
+                      console.log(err);
+                      history.push('/')
+                    })
+                }}
+                />
+              )
+            }
+            {/* <Route path="*" component={ErrorPage} /> */}
+          </Layout>
+        </Switch>
 
-              <Route path="/categories" exact component={Categories} />
-            </Layout>
-          </Switch>
+        <Footer />
 
-          <Footer />
-        </NotificationContext.Provider>
+      </NotificationContext.Provider>
     </AuthContext.Provider>
   );
 }

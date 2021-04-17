@@ -25,7 +25,7 @@ const JumbotronWrapper = () => {
     }
 
     return (
-        <Styles >
+        <Styles>
             <Jumbo fluid className="jumbo"  transformdata={transform}>
                 <div className="overlay"></div>
                 <Container>
