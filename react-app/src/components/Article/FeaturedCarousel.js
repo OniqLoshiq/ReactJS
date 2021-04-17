@@ -54,7 +54,7 @@ const Styles = styled.div`
         bottom: 0;
     }
 
-    .carousel-idicators {
+    .carousel-indicators li{
         background-color: red;
     }
 

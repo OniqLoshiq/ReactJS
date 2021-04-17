@@ -36,7 +36,7 @@ const Header = ({ username, role, profilePicture }) => {
                         <Nav.Item><Link to="/">Home</Link></Nav.Item>
                         <Nav.Item><Link to="/categories">Categories</Link></Nav.Item>
                         {username && (role === "admin") && <Nav.Item><Link to="/user/list">Members</Link></Nav.Item>}
-                        {username && <Nav.Item><Link to="/category/create">Create Category</Link></Nav.Item>}
+                        {username && (role !== "basic") &&  <Nav.Item><Link to="/category/create">Create Category</Link></Nav.Item>}
                         {username && <Nav.Item><Link to="/article/create">Create Article</Link></Nav.Item>}
                     </Nav>
                     <Nav className="ml-auto">

@@ -37,7 +37,7 @@ const SignIn = () => {
                     auth.setUserCredentials(result);
                     if (customServerError) setCustomServerError(null);
 
-                    notifications.timeout("success", 'Sign in was successfull');
+                    // notifications.timeout("success", 'Sign in was successfull');
                     history.push('/');
                 } catch (error) {
                     if (typeof error === 'object') {

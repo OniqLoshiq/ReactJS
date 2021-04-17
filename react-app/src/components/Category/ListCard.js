@@ -45,7 +45,7 @@ const Styles = styled.div`
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
-            color:red;
+            color:white;
         }
         }
 
