@@ -2,13 +2,26 @@ import { Link } from 'react-router-dom';
 import { Editor } from '@tinymce/tinymce-react';
 import parseDate from '../../helpers/parseDate';
 import styled from 'styled-components';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+import Button from 'react-bootstrap/Button';
 import { faThumbsUp as solThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { faThumbsDown as solThumbsDown } from "@fortawesome/free-solid-svg-icons";
 import { faThumbsUp as regThumbsUp } from "@fortawesome/free-regular-svg-icons";
 import { faThumbsDown as regThumbsDown } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ModalDelete from '../Shared/ModalDelete';
 
 const ReadArticle = ({
+    userRole,
+    isLogged,
+    isCreator,
+    hasLiked,
+    hasDisliked,
+    handleLikeClick,
+    handleDislikeClick,
+    handleDeleteArticle,
+    _id,
     title,
     subtitle,
     body,
@@ -16,11 +29,9 @@ const ReadArticle = ({
     likes,
     dislikes,
     createdAt,
-    updatedAt,
     category,
     author
 }) => {
-    const parsedUpdated = parseDate(updatedAt);
     const parsedCreated = parseDate(createdAt);
 
     return (
@@ -57,9 +68,6 @@ const ReadArticle = ({
                                     </Link>
                                 </div>
                                 <div>Created: {parsedCreated}</div>
-                                {
-                                    parsedUpdated !== parsedCreated && <div>Last updated: {parsedUpdated}</div>
-                                }
                             </section>
                         </section>
                     </div>
@@ -68,11 +76,50 @@ const ReadArticle = ({
                 <section className="body">
                     <section className="body-title">
                         <div className="title">Body</div>
+                        {(isCreator || userRole === 'admin' || userRole === 'moderator') ? (
+                             <div className="edit-delete">
+                             <Button variant="warning" size="sm" className="edit"><Link to={`/article/edit/${_id}`}>Edit</Link></Button>
+                             {userRole === 'admin' || userRole === 'moderator' ?  (<ModalDelete handleDeleteArticle={handleDeleteArticle}/>) : null}
+                         </div>
+                        ) : null}
+                        
                         <div className="actions-wrapper">
-                            <div className="approvals">
-                                <FontAwesomeIcon icon={solThumbsUp} className="likes"/> {likes.length}
-                                <FontAwesomeIcon icon={solThumbsDown} className="dislikes"/> {dislikes.length}
-                            </div>
+                            {isLogged && !isCreator ?
+                                (<div className="approvals">
+                                    <button className="likes" onClick={handleLikeClick}>
+                                        {hasLiked && (<FontAwesomeIcon icon={solThumbsUp} size="lg" />)}
+                                        {!hasLiked && (<FontAwesomeIcon icon={regThumbsUp} size="lg" />)}
+                                        {likes.length}
+                                    </button>
+                                    <button className="dislikes" onClick={handleDislikeClick}>
+                                        {hasDisliked && <FontAwesomeIcon icon={solThumbsDown} size="lg" />}
+                                        {!hasDisliked && <FontAwesomeIcon icon={regThumbsDown} size="lg" />}
+                                        {dislikes.length}
+                                    </button>
+                                </div>) :
+                                (<div className="approvals">
+                                    <OverlayTrigger
+                                        placement="top"
+                                        overlay={
+                                            <Tooltip id={"tooltip-top"}>
+                                                Sign in to rate or it's just you :)
+                                            </Tooltip>
+                                        }
+                                    >
+                                        <button className="likes"><FontAwesomeIcon icon={regThumbsUp} size="lg" /> {likes.length}</button>
+                                    </OverlayTrigger>
+                                    <OverlayTrigger
+                                        placement="top"
+                                        overlay={
+                                            <Tooltip id={"tooltip-top"}>
+                                                Sign in to rate or it's just you :)
+                                            </Tooltip>
+                                        }
+                                    >
+                                        <button className="dislikes"><FontAwesomeIcon icon={regThumbsDown} size="lg" /> {dislikes.length}</button>
+                                    </OverlayTrigger>
+                                </div>)
+                            }
                         </div>
                     </section>
 
@@ -172,10 +219,39 @@ const Styles = styled.div`
     .body {
         .body-title{
             margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .delete{
+            margin-left: 0.5rem;
+        }
+        .edit {
+            margin-right: 0.5rem;
+
+            & a {
+                text-decoration:none;
+                color:white;
+            }
+        }
+
+        .approvals {
+            display:flex;
+        }
+
+        .likes, .dislikes {
+            background: none;
+	        border: none;
+	        padding: 0;
+	        cursor: pointer;
+	        outline: none;
+
         }
 
         .likes {
             color: green;
+            margin-right: 1rem;
+           
         }
 
         .dislikes {

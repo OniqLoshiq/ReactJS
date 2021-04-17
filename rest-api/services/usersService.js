@@ -72,7 +72,7 @@ module.exports = {
     },
 
     async getOne(id){
-        const user = await User.findById({_id: id}).exec();
+        const user = await User.findOne({_id: id}).exec();
 
         return user;
     },

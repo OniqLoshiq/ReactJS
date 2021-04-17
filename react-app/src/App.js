@@ -22,6 +22,8 @@ import usersService from './services/usersService';
 import ListUsers from './components/User/ListUsers';
 import CreateCategory from './components/Category/CreateCategory';
 import CreateArticle from './components/Article/CreateArticle';
+import EditArticle from './components/Article/EditArticle';
+import ViewCategory from './components/Category/ViewCategory';
 
 
 const App = () => {
@@ -118,8 +120,10 @@ const App = () => {
               <Route path="/demo" exact component={Demo} />
               <Route path="/demo2" exact component={Demo2} />
               <Route path="/category/create" exact component={CreateCategory} />
+              <Route path="/category/:id" exact component={ViewCategory} />
               <Route path="/article/create" exact component={CreateArticle} />
               <Route path="/article/:id" exact component={ViewArticle} />
+              <Route path="/article/edit/:id" exact component={EditArticle} />
 
               <Route path="/user/register" exact component={Register} />
               <Route path="/user/signIn" exact component={SignIn} />

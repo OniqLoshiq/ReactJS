@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import parseDate from '../../helpers/parseDate';
 
 
-const LatestCard = ({ _id, title, frontPicture, updatedAt, category}) => {
-    const parsedUpdatedAt = parseDate(updatedAt);
+const LatestCard = ({ _id, title, frontPicture, createdAt, category}) => {
+    const parsedCreatedAt = parseDate(createdAt);
 
     return (
         <Styles>
@@ -22,7 +22,7 @@ const LatestCard = ({ _id, title, frontPicture, updatedAt, category}) => {
                 <Card.Footer>
                     <small className="text-muted">
                         <div>{category.name}</div>
-                        <div>{parsedUpdatedAt}</div>
+                        <div>{parsedCreatedAt}</div>
                     </small>
                 </Card.Footer>
             </Card>

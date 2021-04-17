@@ -18,6 +18,8 @@ router.get('/', async (req, res) => {
                 featured: featuredArticles,
                 latest: latestArticles
             }
+        } else if(req.query.category){
+            articles = await Article.find({category: req.query.category}).populate('author', 'username').populate('category', 'name').lean().exec();
         } else {
             articles = await Article.find({}).exec();
         }
@@ -66,14 +68,72 @@ router.post('/', isAuth, async (req, res) => {
 });
 
 // Updating one
-router.patch('/:id', getArticle, (req, res) => {
+router.patch('/:id', async (req, res) => {
+    try{
+        let article = await Article.findOne({ _id: req.params.id });
 
+        if (req.body.type) {
+            const type = req.body.type;
+            const userId = req.body.userId;
+            const indexLikes = article.likes.indexOf(userId);
+            const indexDisikes = article.dislikes.indexOf(userId);
+    
+            switch (type) {
+                case 'like':
+                    if (indexLikes < 0) article.likes.push(req.body.userId);
+                    break;
+                case 'unlike':
+                    if (indexLikes >= 0) article.likes.splice(indexLikes, 1);
+                    break;
+                case 'like-undislike':
+                    if (indexLikes < 0) article.likes.push(req.body.userId);
+                    if (indexDisikes >= 0) article.dislikes.splice(indexDisikes, 1)
+                    break;
+                case 'undislike':
+                    if (indexDisikes >= 0) article.dislikes.splice(indexDisikes, 1)
+                    break;
+                case 'dislike':
+                    if (indexDisikes < 0) article.dislikes.push(req.body.userId);
+                    break;
+                case 'dislike-unlike':
+                    if (indexDisikes < 0) article.dislikes.push(req.body.userId);
+                    if (indexLikes >= 0) article.likes.splice(indexLikes, 1);
+                    break;
+                default:
+            }
+        } else {
+            const {title, subtitle, body, frontPicture } = req.body;
+
+            if(article.title !== title) article.title = title;
+            if(article.subtitle !== subtitle) article.subtitle = subtitle;
+            if(article.body !== body) article.body = body;
+            if(article.frontPicture !== frontPicture) article.frontPicture = frontPicture;
+        }
+    
+        article.save();
+    
+        return res.json('Update successfull')
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+    
 });
 
 // Deleting one
-router.delete('/:id', getArticle, async (req, res) => {
+router.delete('/:id', isAuth, authRoleNotBasic, async (req, res) => {
     try {
-        await req.article.remove();
+        const removedArticle = await Article.findOneAndDelete({ _id: req.params.id });
+        await User.findOneAndUpdate({ _id: removedArticle.category._id }, {
+            $pull: {
+                'articles': req.params.id
+            }
+        });
+
+        await Category.findOneAndUpdate({ _id: removedArticle.category._id }, {
+            $pull: {
+                'articles': req.params.id
+            }
+        });
         res.json('Article deleted!')
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -84,16 +144,16 @@ async function getArticle(req, res, next) {
     let article;
     try {
         article = await Article.findById(req.params.id)
-                                .populate('category', 'name')
-                                .populate('author', 'firstName lastName username profilePicture')
-                                .lean()
-                                .exec();
+            .populate('category', 'name')
+            .populate('author', 'firstName lastName username profilePicture')
+            .lean()
+            .exec();
 
         if (!article) {
             return res.status(404).json('Cannot find article!')
         }
 
-        return res.json(article);
+
     } catch (err) {
         return res.status(500).json({ message: err.message });
     }
@@ -120,7 +180,7 @@ const getFeaturedArticles = async () => {
                     'title': 1,
                     'subtitle': 1,
                     'frontPicture': 1,
-                    'updatedAt': 1,
+                    'createdAt': 1,
                     'categoryId': '$category._id',
                     'categoryName': '$category.name',
                     'likesCount': { '$size': '$likes' }
@@ -129,7 +189,7 @@ const getFeaturedArticles = async () => {
             {
                 $sort: {
                     'likesCount': -1,
-                    'updatedAt': -1
+                    'createdAt': -1
                 }
             },
             { $limit: 6 }
@@ -170,8 +230,8 @@ const getLatestArticles = async () => {
     //                     ]).exec();
 
     const articles = await Article
-        .find({}, 'title frontPicture updatedAt category')
-        .sort({ updatedAt: -1 })
+        .find({}, 'title frontPicture createdAt category')
+        .sort({ createdAt: -1 })
         .limit(8)
         .populate('category', 'name')
         .lean()

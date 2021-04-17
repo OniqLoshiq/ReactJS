@@ -6,8 +6,8 @@ import { faThumbsUp as solThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
-const FeaturedCard = ({ _id, title, subtitle, frontPicture, updatedAt, categoryName, categoryId, likesCount }) => {
-    const parsedUpdatedAt = parseDate(updatedAt);
+const FeaturedCard = ({ _id, title, subtitle, frontPicture, createdAt, categoryName, categoryId, likesCount }) => {
+    const parsedCreatedAt = parseDate(createdAt);
 
     return (
         <Styles>
@@ -23,7 +23,7 @@ const FeaturedCard = ({ _id, title, subtitle, frontPicture, updatedAt, categoryN
                        
                             <small className="text-muted">
                                 <div>{categoryName}</div>
-                                <div>Last updated: {parsedUpdatedAt}</div>
+                                <div>Created at: {parsedCreatedAt}</div>
                                 <div><FontAwesomeIcon icon={solThumbsUp} /> {likesCount}</div>
                             </small>
                     </Card.ImgOverlay>

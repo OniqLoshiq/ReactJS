@@ -7,7 +7,7 @@ const ListCard = ({ id, name, description, picture, articles }) => {
     return (
         <Styles>
             <Card>
-                <Link to={`/categories/${id}`}>
+                <Link to={`/category/${id}`}>
                     <Card.Img variant="top" src={picture} />
                     <Card.ImgOverlay>
                         <Card.Title className="title-normal">{name}</Card.Title>

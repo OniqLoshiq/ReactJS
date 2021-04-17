@@ -1,7 +1,7 @@
 import { Editor } from '@tinymce/tinymce-react';
 import styled from 'styled-components';
 
-const TextareaTinyMce = ({id, name, handleChange}) => {
+const TextareaTinyMceEdit = ({id, name, value, handleChange}) => {
     
     return (
         <Styles>
@@ -9,7 +9,7 @@ const TextareaTinyMce = ({id, name, handleChange}) => {
                 id={id}
                 name={name}
                 apiKey="3ru051la3ygpszi787gxznred27xo7l4dwb1wojv9qn01k9w"
-                initialValue=" "
+                initialValue={value}
                 init={{
                     height: 500,
                     selector: 'textarea',
@@ -40,4 +40,4 @@ const Styles = styled.div`
     background-color: white;
 `;
 
-export default TextareaTinyMce;
+export default TextareaTinyMceEdit;
