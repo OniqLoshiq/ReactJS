@@ -211,6 +211,11 @@ const Styles = styled.div`
     .form-form{
         margin-top: 2rem;
     }
+
+    .btn-info{
+        background-color: #0288D1;
+        border-color: #0288D1;
+    }
         
     .wrapper{
         display: flex;

@@ -17,7 +17,7 @@ const Styles = styled.div`
     width: 100%;
     padding: 0.5rem 0;
     text-align: center;
-    background-color: blue;
+    background-color: #424242;
     font-size: 0.75rem;
     color: white;
 `;

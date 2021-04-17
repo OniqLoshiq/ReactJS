@@ -57,12 +57,12 @@ const Styles = styled.div`
         border-left: 0;
         border-right: 0;
         border-radius: 0;
-        border-bottom: 1px solid blue;
+        border-bottom: 1px solid #BDBDBD;
         outline: none;
 
         &:hover{
         box-shadow: none;
-        border-bottom: 2px solid red;
+        border-bottom: 2px solid rgba(207, 216, 220, 0.2);
         }
     }
     

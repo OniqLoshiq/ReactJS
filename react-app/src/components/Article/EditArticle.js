@@ -140,7 +140,6 @@ const EditArticle = ({ match }) => {
                                         Edit
                                     </Button>
                                 </div>
-                                <pre>{JSON.stringify(values, null, 2)}</pre>
                             </Col>
                         </Form.Row>
                     </Form>
@@ -167,14 +166,14 @@ const Styles = styled.div`
         border-left: 0;
         border-right: 0;
         border-radius: 0;
-        border-bottom: 1px solid blue;
+        border-bottom: 1px solid #BDBDBD;
         outline: none;
     }
 
     #subtitle:hover, #frontPicture:hover {
         box-shadow: none;
         border-bottom: 2px solid red;
-        background-color: rgba(255, 0, 0, 0.2);
+        background-color: rgba(207, 216, 220, 0.2);
     }
 
     .center-wrapper{
@@ -182,6 +181,10 @@ const Styles = styled.div`
         justify-content: center;
         align-items: center;
         margin-top: 1rem;
+    }
+    .btn-primary {
+        background-color:#81C784;
+        border-color: #81C784;
     }
 
     .bottom-margin-setter{

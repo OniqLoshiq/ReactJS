@@ -57,7 +57,7 @@ const SignIn = () => {
                     <HrLine hrWidth="75%" mTop="1rem" mBottom="2.2rem" />
                     <Row className="wrapper">
                         <Col md="4" className="panel-left center-wrapper">
-                            <div><img src="/EP-logo_1.png" alt="e-platform logo" /></div>
+                            <div><img src="/EP-logo_3.png" alt="e-platform logo" /></div>
                             <div>e-Platform</div>
                         </Col>
                         <Col md="8" className="panel-right">
@@ -115,9 +115,15 @@ const Styles = styled.div`
         padding-top: 1.5rem;
         }
     }
+
+    .btn-primary{
+        background-color:#81C784;
+        border-color: #81C784;
+    }
    
     .panel-left{
-        background-color: red;
+        background-color: #424242;
+        color: white;
         border-top-left-radius: 20px;
         border-bottom-left-radius: 20px;
         flex-direction: column;
@@ -134,7 +140,7 @@ const Styles = styled.div`
     }
 
     .panel-right{
-        background-color: silver;
+        background-color: #E0E0E0;
         border-top-right-radius: 20px;
         border-bottom-right-radius: 20px;
         padding-left: 2rem;
@@ -148,7 +154,7 @@ const Styles = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 1rem;
+        margin-top: 0rem;
     }
 
     .bottom-margin-setter{
@@ -172,7 +178,7 @@ const Styles = styled.div`
         }
 
         .panel-left{
-            background-color: red;
+            background-color: #424242;
             border-top-left-radius: 20px;
             border-top-right-radius: 20px;
             border-bottom-left-radius: 0px;

@@ -27,7 +27,7 @@ const Header = ({ username, role, profilePicture }) => {
     return (
         <Styles shouldFormat={shouldFormatHeader}>
             <Link to='/'>
-                <img src="/EP-logo_1.png" alt="e-platform logo" />
+                <img src="/EP-logo_3.png" alt="e-platform logo" />
             </Link>
             <Navbar expand="md" fixed="top">
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -64,7 +64,7 @@ const Styles = styled.div`
         height: ${props => props.shouldFormat ? "40px" : "65px"};
     }
     .navbar {
-        background-color: ${props => props.shouldFormat ? "rgba(255, 138, 101, 1)" : "rgba(255, 138, 101, .1)"};;
+        background-color: ${props => props.shouldFormat ? "#424242" : "rgba(224, 224, 224, .1)"};;
         padding: 0.5rem 2rem 0.5rem 5.5rem;
         font-size: 1.1rem;
         font-weight: bold;

@@ -54,10 +54,13 @@ const Styles = styled.div`
         bottom: 0;
     }
 
+    .carousel-idicators {
+        background-color: red;
+    }
+
     .carousel-control-next{
         padding-left: 2rem;
         padding-bottom: 3rem;
-       
     }
 
     .carousel-control-next-icon{

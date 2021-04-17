@@ -144,6 +144,11 @@ const Styles = styled.div`
         justify-content: center;
     }
 
+    .btn-primary {
+        background-color:#81C784;
+        border-color: #81C784;
+    }
+
     #frontPicture {
         padding: 0.2rem 0;
     }
@@ -153,14 +158,14 @@ const Styles = styled.div`
         border-left: 0;
         border-right: 0;
         border-radius: 0;
-        border-bottom: 1px solid blue;
+        border-bottom: 1px solid #BDBDBD;
         outline: none;
     }
 
     #subtitle:hover, #frontPicture:hover {
         box-shadow: none;
         border-bottom: 2px solid red;
-        background-color: rgba(255, 0, 0, 0.2);
+        background-color: rgba(207, 216, 220, 0.2);
     }
 
     .center-wrapper{

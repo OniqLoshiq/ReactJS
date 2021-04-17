@@ -12,10 +12,11 @@ export default Title;
 
 const Styles = styled.div`
     &.title{
+        
         text-align: center;
         font-weight: bold;
         text-transform: uppercase;
-        margin-top: -1rem;
+        margin-top: 1rem;
         font-size: 1.5rem;
     }
 `;

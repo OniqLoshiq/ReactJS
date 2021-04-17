@@ -88,7 +88,7 @@ const ViewArticle = ({ match }) => {
 
     useEffect(() => {
         loadArticle();
-    }, [loadArticle, logicState])
+    }, [loadArticle])
 
     const handleDeleteArticle = async () => {
         try {

@@ -22,13 +22,13 @@ const Styles = styled.div`
         border-left: 0;
         border-right: 0;
         border-radius: 0;
-        border-bottom: 1px solid blue;
+        border-bottom: 1px solid #BDBDBD;
         outline: none;
 
         &:focus, &:active {
             box-shadow: none;
             border-bottom: 2px solid red;
-            background-color: rgba(255, 0, 0, 0.2);
+            background-color: rgba(207, 216, 220, 0.2);
         }
     }
 `;
